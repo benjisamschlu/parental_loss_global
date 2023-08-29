@@ -1,0 +1,261 @@
+---
+title: "Parental loss: a global perspective"
+subtitle: "Exploratory data analysis for PAA abstract"
+format: 
+  html:
+      code-fold: true
+      code-summary: "Show code"
+      embed-resources: true
+editor: visual
+---
+
+```{r}
+#| warning: false
+#| message: false
+
+
+## Load packages ---------------------------------------------------------------
+
+## Install/load packages
+packages <- c("tidyverse", "ggplot2", "here", "viridis")
+for(p in packages){
+    if(!require(p,character.only = TRUE)) install.packages(p)
+    library(p,character.only = TRUE)
+}
+
+
+
+## Functions -------------------------------------------------------------------
+
+## Script containing the functions computing
+## the main elements required to run the kin dynamics
+
+
+
+## Load data -------------------------------------------------------------------
+
+df_birth = readRDS(here("data", "df_birth_example_countries.rda"))
+
+df_results <- readRDS(here("data", "df_results.rda"))
+
+
+```
+
+
+## Notes:
+
+* 
+
+
+Decrease in parental death at young ages, highly visible for Senegal and Afghanistan. Improvement is higher for mother than father in Afghanistan (@fig-parentdth).
+
+```{r}
+#| label: fig-parentdth
+#| fig-cap: "Parental death by parent sex at individual level across selected countries and years"
+#| warning: false
+#| message: false
+
+
+fig.years = c(seq(1960, 2000, 20), 2019)
+
+df_results |> 
+    filter(
+        ## model assumes parent alive at birth of child
+        age > 0,
+        year %in% fig.years
+        ) |> 
+    ## Sum over all causes of death
+    group_by(
+      ctry, year, age, sex
+      ) |> 
+    summarise(
+      N = sum(N)
+      ) |> 
+    ungroup() |> 
+    ggplot(aes(x = age, y = N, col = ctry)) +
+    facet_grid(sex ~ year) +
+    geom_line(linewidth = 1) +
+    theme_bw() +
+    theme(legend.position = "top") + 
+    labs(y = "Parental death at each age",
+         x = "Child's life course (age in years)",
+         col = "Country")
+
+
+```
+
+Children aged less than 18 years old losing a mother/father (@fig-nberchildrenber).
+
+```{r}
+#| label: fig-nberchildrenber
+#| fig-cap: "Number of children bereaved across selected countries and years"
+#| warning: false
+#| message: false
+
+## cod data available from year 1990
+## !! years 1950  to 1990, assumed causes where
+## having equal prob of dying !!
+df_results |> 
+    filter(
+      ## assume stable population in 1950 but focus on children 
+      ## aged < 18 yo, so good to focus on years > 1968
+      year >= 1970,
+      ## model assumes parent alive at birth of child
+      age > 0,
+      ## focus on children aged < 18
+      age < 18
+      ) |>
+  ## Sum nber of children losing parent from 
+  ## all different causes over ages 1 to 17 yo
+  group_by(
+    ctry, year, sex
+    ) |> 
+  summarise(
+    clp = sum(clp)
+    ) |>
+  ungroup() |> 
+  ggplot(aes(x = year, y = clp, col = ctry)) +
+  facet_grid(ctry ~ sex,
+             scales = "free_y") +
+  geom_line(linewidth = 1) +
+  theme_bw() +
+  theme(legend.position = "top") + 
+  labs(y = "Number of born children losing parent",
+       x = "Child's life course (age in years)",
+       col = "Country")
+    
+
+
+```
+
+
+
+```{r}
+#| label: fig-sharechildrenber
+#| fig-cap: "Share of children bereaved across selected countries and years"
+#| warning: false
+#| message: false
+
+## cod data available from year 1990
+## !! years 1950  to 1990, assumed causes where
+## having equal prob of dying !!
+df_results |> 
+    filter(
+        ## assume stable population in 1950 but focus on children 
+        ## aged < 18 yo, so good to focus on years > 1968
+        year >= 1970,
+        ## model assumes parent alive at birth of child
+        age > 0,
+        ## focus on children aged < 18
+        age < 18
+        ) |>
+    ## Sum prop of born children losing parent from 
+    ## all different causes over ages 1 to 17 yo
+    group_by(
+      sex, year, ctry
+      ) |> 
+    summarise(
+      perc = sum(perc)
+      ) |> 
+    ungroup() |> 
+    ggplot(aes(x = year, y = perc, col = ctry)) +
+    facet_wrap(~ sex) +
+    geom_line(linewidth = 1) +
+    theme_bw() +
+    theme(legend.position = "top") + 
+    labs(y = "Percentage of born children losing a parent",
+         x = "Year",
+         col = "Country")
+```
+
+
+```{r}
+#| label: fig-berprobcause
+#| fig-cap: "Bereavement probability across selected countries and years"
+#| #| fig-width: 15
+#| fig-height: 8
+#| fig-column: page-right
+#| warning: false
+#| message: false
+
+## cod data available from year 1990
+## !! years 1950  to 1990, assumed causes where
+## having equal prob of dying !!
+fig.years = c(1990, 2005, 2019)
+
+df_results |> 
+  ## Get outputs for both parents combined
+  ## (= losing at least one parent)
+  ## Sum death over parent sex
+    group_by(
+        ctry, year, cause, age
+        ) |>
+    summarise(
+        N = sum(N)
+        ) |> 
+    ungroup() |> 
+    mutate(
+        ## Bereavement prob of losing >= 1 parent
+        prob_ber = 1 - (1 - (N / 2))^2
+    ) |> 
+  filter(
+    ## model assumes parent alive at birth of child
+    age > 0,
+    year %in% fig.years
+    ) |> 
+    ggplot(aes(x = age, y = prob_ber, col = cause)) +
+    facet_grid(year ~ ctry) +
+    geom_line(linewidth = 1) +
+    theme_bw() +
+  theme(legend.position = "bottom",
+        legend.title = element_text(size = 6), 
+        legend.text = element_text(size = 6)) +
+  guides(color = guide_legend(override.aes = list(size = 1))) +
+    labs(y = "Bereavement probability",
+         x = "Child's life course (age in years)")
+
+
+```
+
+
+```{r}
+#| label: fig-check
+#| fig-cap: "Check"
+#| warning: false
+#| message: false
+
+## cod data available from year 1990
+## !! years 1950  to 1990, assumed causes where
+## having equal prob of dying !!
+fig.years = c(1990, 2019)
+
+df_results |> 
+    ## Get outputs for both parents combined
+  ## (= losing at least one parent)
+  ## Sum death over parent sex
+    group_by(
+        ctry, year, age
+        ) |>
+    summarise(
+        N = sum(N)
+        ) |> 
+    ungroup() |> 
+    filter(
+    ## model assumes parent alive at birth of child
+    age > 0,
+    year %in% fig.years
+    ) |>  
+  group_by(year, ctry) |> 
+  mutate(cumN = cumsum(N)) |> 
+  ungroup() |> 
+  mutate(prob_ber = 1 - (1 - (cumN/2))^2) |> 
+    ggplot(aes(x = age, y = prob_ber)) +
+    facet_grid(year ~ ctry) +
+    geom_line(linewidth = 1) +
+    theme_bw() +
+    labs(y = "Cum. bereavement probability",
+         x = "Child's life course (age in years)")
+
+
+```
+ 

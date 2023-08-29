@@ -1,0 +1,66 @@
+---
+title: "Parental Loss: A Global Perspective"
+toc: false
+output: 
+        pdf_document:
+                extra_dependencies: ["float"]
+bibliography: refs_prop.bib
+csl: demographic-research.csl
+---
+
+
+
+# Aim
+
+Study parental deaths for children aged less than 18 years old over the period 1950-2021, from a worldwide perspective. We could try to assess how the number and timing of parent deaths of an average child has changed over this period. Focusing on the years 1990-2019, we could estimate the number of children losing parents due to the different causes, the cause-specific bereavement probabilities, and their temporal variation in level.  
+Instead of focusing on broad causes, an alternative could be to focus on a set of specific causes of death (i.e. HIV, injuries, diabetes, neonatal disorders, specific neoplasms, ...).  
+The analyses could be performed at a country level but it might also be interesting to group them into regions for some results (see @alburez2021women for example).  
+
+
+
+# Method
+
+## Formal demography approach
+
+The kinship matrix model developed by Caswell [@caswell2019formal] combining several extensions to use time-varying and sex-differentiated (only for mortality) vital rates while accounting for death from multiple causes [@caswell2021formal; @caswell2022formal; @caswell2023formal].  Uncertainty in dynamics could be incorporated in a Monte-Carlo simulation set-up.
+
+## Micro-simulation
+
+(Spoiler alert: no past experience with SOCSIM)
+
+SOCSIM [@hammel1976socsim] setup without marriage rates: births are based on
+female fertility [similarly as in @alburez2021sandwich]. Especially interesting when looking at parental loss from all causes of death over the period 1950-2021 to complement/compare results from the kinship matrix model. Not sure SOCSIM can handle multiple causes of death, can it?
+
+
+
+# Inputs for methods
+
+## UN WPP 2022 revision
+
+Country-level time series over 1950-2021
+
+* Population counts by 1-year age groups and sex
+
+* Fertility rates by 1-year age groups of mother
+
+* Births counts
+
+* Probability of dying/surviving by 1-year age groups and sex
+
+* Life table $l_x$ by 1-year age groups both sex combined
+
+
+
+## Global Burden of Disease 
+
+Country-level time series over 1990-2019
+
+* Death counts by level 2/3 causes, 5-year age groups and sex
+
+* Population counts by 1-year age groups and sex
+
+
+
+# References
+
+<div id="refs"></div>
