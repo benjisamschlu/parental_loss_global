@@ -35,7 +35,7 @@ source(here("code", "fct_kmm.R"))
 
 df = readRDS(here("data", "df_rates_example_countries.rda"))
 df_birth = readRDS(here("data", "df_birth_example_countries.rda"))
-causes_names = readRDS(here("data_raw", "gbd-causes.rds"))
+causes_names = readRDS(here("data", "gbd-causes.rds"))
 d_x_t = readRDS(here("data_private", "d_x_t.rda"))
 
 

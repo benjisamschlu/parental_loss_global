@@ -36,22 +36,79 @@ for(p in packages){
 
 df_birth = readRDS(here("data", "df_birth_example_countries.rda"))
 
-df_results <- readRDS(here("data", "df_results.rda"))
+df_results <- readRDS(here("data", "df_results.rda")) |> 
+  mutate(
+    ## Improve plotting
+    ctry = ifelse(ctry == "United States of America", "USA", ctry)
+    )
 
 
 ```
 
 
-## Notes:
+## Notes to readers:
 
-* 
+* Antonino and Ben extracted and formatted GBD and UNWPP data, respectively.
+
+* GBD level 2 causes are currently considered (21 causes). 
+
+* Median scenario are considered from UNWPP and GBD estimates.
+
+* Report based on a sample of six countries (Afghanistan, China, Germany, Mexico, Senegal, and USA). It was quicker to run the analyses, and made it possible to share data sets on Github.
+
+* Currently, the model assumes that males have the same fertility rates as females.
+
+* Uncertainty around estimates is not considered and not modeled. Adding it would require substantial coding and running time (big arrays are involved to code the kin dynamics).
+
+* UNWPP and GBD data ranges from 1950 to 2022 and from 1990 to 2019, respectively. Thus, cause-specific causes of death are not considered before 1990. 
+
+* In 1950, we assumed a stable population which might have an impact on the parent's age distribution. Hence, for plots focusing on children (i.e. individuals aged less than 18 years old), we plotted the years 1970-2019 (from 1968 onward, the stable population assumption is not playing a role anymore when focusing on individuals aged less than 18 years old). 
 
 
-Decrease in parental death at young ages, highly visible for Senegal and Afghanistan. Improvement is higher for mother than father in Afghanistan (@fig-parentdth).
+## Preliminary results
+
+Differential in mortality between sexes is visible in @fig-parentdthsex: fathers are lost earlier. Curves converge to left-skewed normal distributions as time passes. Afghan children lose their fathers at younger ages relative to other countries in recent years. 
 
 ```{r}
-#| label: fig-parentdth
-#| fig-cap: "Parental death by parent sex at individual level across selected countries and years"
+#| label: fig-parentdthsex
+#| fig-cap: "Parental death by parent sex at individual level across selected countries and years - sex comparison"
+#| warning: false
+#| message: false
+
+
+fig.years = c(seq(1960, 2000, 20), 2019)
+
+df_results |> 
+    filter(
+        ## model assumes parent alive at birth of child
+        age > 0,
+        year %in% fig.years
+        ) |> 
+    ## Sum over all causes of death
+    group_by(
+      ctry, year, age, sex
+      ) |> 
+    summarise(
+      N = sum(N)
+      ) |> 
+    ungroup() |> 
+    ggplot(aes(x = age, y = N, col = sex)) +
+    facet_grid(year ~ ctry) +
+    geom_line(linewidth = 1) +
+    theme_bw() +
+    theme(legend.position = "top",
+          legend.title = element_blank()) + 
+    labs(y = "Parental death at each age",
+         x = "Child's life course (age in years)")
+
+
+```
+
+Convergence in parental death at young ages as time passes, highly visible for Senegal and Afghanistan. Improvement is higher for mother than for father in Afghanistan (@fig-parentdthctry).
+
+```{r}
+#| label: fig-parentdthctry
+#| fig-cap: "Parental death by parent sex at individual level across selected countries and years - country comparison"
 #| warning: false
 #| message: false
 
@@ -76,19 +133,19 @@ df_results |>
     facet_grid(sex ~ year) +
     geom_line(linewidth = 1) +
     theme_bw() +
-    theme(legend.position = "top") + 
+    theme(legend.position = "top",
+          legend.title = element_blank()) + 
     labs(y = "Parental death at each age",
-         x = "Child's life course (age in years)",
-         col = "Country")
+         x = "Child's life course (age in years)")
 
 
 ```
 
-Children aged less than 18 years old losing a mother/father (@fig-nberchildrenber).
+The number of children aged less than 18 years old losing a mother/father over the years (@fig-nberchildrenber). Population growth makes the interpretation of this figure difficult (i.e. Senegal). See @fig-sharechildrenber for percentages instead of absolute numbers.  
 
 ```{r}
 #| label: fig-nberchildrenber
-#| fig-cap: "Number of children bereaved across selected countries and years"
+#| fig-cap: "Number of children aged <18 years old bereaved across selected countries and years"
 #| warning: false
 #| message: false
 
@@ -119,15 +176,16 @@ df_results |>
              scales = "free_y") +
   geom_line(linewidth = 1) +
   theme_bw() +
-  theme(legend.position = "top") + 
-  labs(y = "Number of born children losing parent",
-       x = "Child's life course (age in years)",
-       col = "Country")
+  theme(legend.position = "top",
+        legend.title = element_blank()) + 
+  labs(y = "Number of children losing parent",
+       x = "Child's life course (age in years)")
     
 
 
 ```
 
+It is interesting to compare the percentage of born children losing a parent according to the parent sex (@fig-sharechildrenber). In the year 2020, the disparity in the percentage of born children losing a father is higher compared to the one of losing a mother (i.e USA with drugs epidemic killing young men). 
 
 
 ```{r}
@@ -168,10 +226,11 @@ df_results |>
          col = "Country")
 ```
 
+Cardiovascular diseases makes it hard to interpet @fig-berprobcause. See @fig-berprobcausenotcardio for the same plot focusing on the deadliest causes of death except cardiovascular diseases.
 
 ```{r}
 #| label: fig-berprobcause
-#| fig-cap: "Bereavement probability across selected countries and years"
+#| fig-cap: "Cause-specific probability of losing at least one parent across selected countries and years"
 #| #| fig-width: 15
 #| fig-height: 8
 #| fig-column: page-right
@@ -208,10 +267,10 @@ df_results |>
     geom_line(linewidth = 1) +
     theme_bw() +
   theme(legend.position = "bottom",
-        legend.title = element_text(size = 6), 
+        legend.title = element_blank(), 
         legend.text = element_text(size = 6)) +
-  guides(color = guide_legend(override.aes = list(size = 1))) +
-    labs(y = "Bereavement probability",
+  guides(color = guide_legend(override.aes = list(size = 1), ncol = 4, nrow = 6)) +
+  labs(y = "Bereavement probability",
          x = "Child's life course (age in years)")
 
 
@@ -219,10 +278,90 @@ df_results |>
 
 
 ```{r}
+#| label: fig-berprobcausenotcardio
+#| fig-cap: "Cause-specific probability of losing at least one parent selected countries and years - deadliest causes without cardiovascular diseases"
+#| #| fig-width: 15
+#| fig-height: 8
+#| fig-column: page-right
+#| warning: false
+#| message: false
+
+## cod data available from year 1990
+## !! years 1950  to 1990, assumed causes where
+## having equal prob of dying !!
+fig.years = c(1990, 2005, 2019)
+
+## Select causes that have a summed bereavement prob
+## over the ages > 0.1
+deadliest_causes <- df_results |> 
+    ## Get outputs for both parents combined
+  ## (= losing at least one parent)
+  ## Sum death over parent sex
+    group_by(
+        ctry, year, cause, age, 
+        ) |>
+    summarise(
+        N = sum(N)
+        ) |> 
+    ungroup() |> 
+    filter(
+    ## model assumes parent alive at birth of child
+    age > 0,
+    year %in% fig.years
+    ) |>  
+  group_by(ctry, year, cause) |> 
+  mutate(cumN = cumsum(N)) |> 
+  ungroup() |> 
+  mutate(prob_ber = 1 - (1 - (cumN/2))^2) |> 
+  filter(age == 100) |> 
+  filter(prob_ber >= 0.1) |> 
+  pull(cause) |> 
+  unique()
+
+df_results |> 
+  ## Get outputs for both parents combined
+  ## (= losing at least one parent)
+  ## Sum death over parent sex
+    group_by(
+        ctry, year, cause, age
+        ) |>
+    summarise(
+        N = sum(N)
+        ) |> 
+    ungroup() |> 
+    mutate(
+        ## Bereavement prob of losing >= 1 parent
+        prob_ber = 1 - (1 - (N / 2))^2
+    ) |> 
+  filter(
+    ## model assumes parent alive at birth of child
+    age > 0,
+    year %in% fig.years,
+    cause != "Cardiovascular diseases",
+    cause %in% deadliest_causes
+    ) |> 
+    ggplot(aes(x = age, y = prob_ber, col = cause)) +
+    facet_grid(year ~ ctry) +
+    geom_line(linewidth = 1) +
+    theme_bw() +
+  theme(legend.position = "bottom",
+        legend.title = element_blank(), 
+        legend.text = element_text(size = 6)) +
+  guides(color = guide_legend(override.aes = list(size = 1), ncol = 4, nrow = 6)) +
+  labs(y = "Cause-specific bereavement probability",
+         x = "Child's life course (age in years)")
+
+
+```
+
+
+
+```{r}
 #| label: fig-check
 #| fig-cap: "Check"
 #| warning: false
 #| message: false
+#| eval: false
 
 ## cod data available from year 1990
 ## !! years 1950  to 1990, assumed causes where
