@@ -1,0 +1,335 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  11pt,
+  letterpaper,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Parental loss from a global perspective},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={blue},
+  urlcolor={blue},
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=25mm]{geometry}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\usepackage{footnote} % For some unknown reason, footnotehyper clashes with French
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newlength{\cslentryspacingunit} % times entry-spacing
+\setlength{\cslentryspacingunit}{\parskip}
+\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+ {% dont indent paragraphs
+  \setlength{\parindent}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+  \let\oldpar\par
+  \def\par{\hangindent=\cslhangindent\oldpar}
+  \fi
+  % set entry spacing
+  \setlength{\parskip}{#2\cslentryspacingunit}
+ }%
+ {}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{#1\hfill\break}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+%%%%%%%% START HEADER PARTIAL %%%%%%%%%%%%
+
+% Formatting of tables & knitr::kable and kableExtra functionality
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+
+% Line numbering
+
+% endfloat stuff
+
+% fancyhdr pagestyle
+
+% Environment for keywords
+\makeatletter
+\newcommand\keywordsname{Keywords}
+\newenvironment*{keywords}[1][\keywordsname]{\if@twocolumn \else \small \quotation \fi \begin{center} \textbf{\textit{#1} \\}}{\end{center}\if@twocolumn \else \small \endquotation \fi}
+\newenvironment*{keywordsinline}[1][\keywordsname]{\if@twocolumn \else \small \quotation \fi \begin{center} \textbf{\textit{#1}: }}{\end{center}\if@twocolumn \else \small \endquotation \fi}
+\makeatother
+
+% Environment for abstract that takes new abstract name
+\newenvironment{renameableabstract}[1][\abstractname]{\let\oldabstractname\abstractname \renewcommand{\abstractname}{#1} \begin{abstract}}{\end{abstract} \renewcommand{\abstractname}{\oldabstractname}}
+
+%%%%%%%% END HEADER PARTIAL %%%%%%%%%%%%
+
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Parental loss from a global perspective}
+
+%%%%%%% START AUTHOR PARTIAL %%%%%%%%%%%%%%%
+
+%%%%% Authors, affiliations and author notes stuff %%%%%
+
+% Macros for creating and referencing stored reference
+\makeatletter
+\def\MyNewLabel#1#2#3{\expandafter\gdef\csname #1@#2\endcsname{#3}}
+
+\def\MyRef#1#2{\@ifundefined{#1@#2}{???}{\csname #1@#2\endcsname}}
+
+\newcommand*\ifcounter[1]{%
+  \ifcsname c@#1\endcsname
+    \expandafter\@firstoftwo
+  \else
+    \expandafter\@secondoftwo
+  \fi
+}
+\makeatother
+
+% Create labels for Addresses if the are given by code
+\MyNewLabel{ADDRTXT}{A}{Department of Statistical Sciences, University of Toronto, Canada}
+\MyNewLabel{ADDRTXT}{B}{Leverhulme Centre for Demographic Science, University of Oxford, England}
+\MyNewLabel{ADDRTXT}{C}{Max Planck Institute for Demographic Research, Germany}
+
+% Create labels for Footnotes if they are given by code
+\MyNewLabel{ANOTETXT}{corresp}{\href{mailto:benjamin.schluter@utoronto.ca}{\nolinkurl{benjamin.schluter@utoronto.ca}}.}
+
+%%% Special footnotes for addresses and author footnotes
+\usepackage{bigfoot}
+\DeclareNewFootnote{Addr}[arabic] % Only used for NOT authblk
+\DeclareNewFootnote{ANote}[fnsymbol]
+
+%%% Address and author notes as a function of format %%%
+ % Use authblk for affiliations %%%%%%%%%%%
+\usepackage{authblk}
+
+% Always separate by commas
+\renewcommand\Authsep{, }
+\renewcommand\Authand{, }
+\renewcommand\Authands{, }
+
+% Counter for addresses and footnotes
+\newcounter{addrcnt}
+
+% thanks definition that doesnt produce superscript marks
+\makeatletter
+\newcommand*\createaddrlblbycode[1]{%
+  \ifcounter{ADDRLBL@#1}
+    {}
+    {\refstepcounter{addrcnt}\newcounter{ADDRLBL@#1}\setcounter{ADDRLBL@#1}{\value{addrcnt}}}%
+}
+
+\newcommand*\addrlblbycode[1]{\arabic{ADDRLBL@#1}}
+
+\newcommand*\addrbycode[1]{%
+  \ifcounter{ADDR@#1}
+    {}
+    {\newcounter{ADDR@#1}%
+     \affil[\addrlblbycode{#1}]{\MyRef{ADDRTXT}{#1}}}%
+}
+
+\newcommand*\createanotelblbycode[1]{%
+  \ifcounter{ANOTELBL@#1}
+    {}
+    {\refstepcounter{footnoteANote}\newcounter{ANOTELBL@#1}\setcounter{ANOTELBL@#1}{\value{footnoteANote}}}%
+}
+
+\newcommand*\anotelblbycode[1]{\fnsymbol{ANOTELBL@#1}}
+
+\newcommand*\anotebycode[1]{%
+  \ifcounter{ANOTE@#1}
+    {}
+    {\newcounter{ANOTE@#1}%
+     \footnotetextANote[\value{ANOTELBL@#1}]{\MyRef{ANOTETXT}{#1}}}%
+}
+\makeatother
+
+
+\createaddrlblbycode{A}
+
+
+\createanotelblbycode{corresp}
+
+\author[%
+\addrlblbycode{A}%
+,%
+$\anotelblbycode{corresp}$%
+]{Benjamin-Samuel Schluter}
+
+\addrbycode{A}
+
+
+\createaddrlblbycode{B}
+
+
+
+\author[%
+\addrlblbycode{B}%
+]{Antonino Polizzi}
+
+\addrbycode{B}
+
+
+\createaddrlblbycode{C}
+
+
+
+\author[%
+\addrlblbycode{C}%
+]{Diego Alburez-Gutierrez}
+
+\addrbycode{C}
+
+
+\createaddrlblbycode{A}
+
+
+
+\author[%
+\addrlblbycode{A}%
+]{Monica Alexander}
+
+\addrbycode{A}
+
+
+%endif(authblk)
+
+%%%%%%%%% END AUTHOR PARTIAL %%%%%%%%
+
+\date{}
+
+\begin{document}
+\maketitle
+
+%%%%%%%%%% START AFTER TITLE PARTIAL %%%%%%%%%%%%%
+\anotebycode{corresp}
+
+
+%%%%%%%%%% END AFTER TITLE PARTIAL %%%%%%%%%%%%%
+
+\begin{abstract}
+150 words
+\end{abstract}
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+\hypertarget{data-and-method}{%
+\section{Data and Method}\label{data-and-method}}
+
+Caswell (\protect\hyperlink{ref-caswell2019formal}{2019})
+
+\hypertarget{preliminary-results}{%
+\section{Preliminary Results}\label{preliminary-results}}
+
+\begin{figure}
+\centering
+\includegraphics{parental_loss_global_paa_ext_abstract_files/figure-latex/unnamed-chunk-1-1.pdf}
+\caption{\label{fig:unnamed-chunk-1}Share of children bereaved across selected countries and years}
+\end{figure}
+
+! FIGURE LABEL !
+
+\begin{figure}
+\centering
+\includegraphics{parental_loss_global_paa_ext_abstract_files/figure-latex/unnamed-chunk-2-1.pdf}
+\caption{\label{fig:unnamed-chunk-2}Share of children bereaved by three main causes across selected countries and years}
+\end{figure}
+
+CHECK IN DF SEEMS LIKE N = PROB\_BER WHEN SUMMING OVER SEX
+
+\begin{figure}
+\centering
+\includegraphics{parental_loss_global_paa_ext_abstract_files/figure-latex/unnamed-chunk-3-1.pdf}
+\caption{\label{fig:unnamed-chunk-3}YYY}
+\end{figure}
+
+\hypertarget{next-steps-extensions}{%
+\section{Next Steps \& Extensions}\label{next-steps-extensions}}
+
+\begin{itemize}
+\tightlist
+\item
+  Validation on US and Mexico
+\end{itemize}
+
+\newpage
+
+\hypertarget{references}{%
+\section*{References}\label{references}}
+\addcontentsline{toc}{section}{References}
+
+\hypertarget{refs}{}
+\begin{CSLReferences}{1}{0}
+\leavevmode\vadjust pre{\hypertarget{ref-caswell2019formal}{}}%
+Caswell, H. (2019). The formal demography of kinship. \emph{Demographic Research} 41:679--712.
+
+\end{CSLReferences}
+
+
+\end{document}

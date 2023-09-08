@@ -64,6 +64,8 @@ df_results <- readRDS(here("data", "df_results.rda")) |>
 
 * In 1950, we assumed a stable population which might have an impact on the parent's age distribution. Hence, for plots focusing on children (i.e. individuals aged less than 18 years old), we plotted the years 1970-2019 (from 1968 onward, the stable population assumption is not playing a role anymore when focusing on individuals aged less than 18 years old). 
 
+* Results are from a period perspective (implied rescaling the number of parent death).
+
 
 ## Preliminary results
 
@@ -279,7 +281,7 @@ df_results |>
 
 ```{r}
 #| label: fig-berprobcausenotcardio
-#| fig-cap: "Cause-specific probability of losing at least one parent selected countries and years - deadliest causes without cardiovascular diseases"
+#| fig-cap: "Cause-specific probability of losing at least one parent across selected countries and years - deadliest causes without cardiovascular diseases"
 #| #| fig-width: 15
 #| fig-height: 8
 #| fig-column: page-right

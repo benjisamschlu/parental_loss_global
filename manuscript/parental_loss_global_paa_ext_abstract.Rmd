@@ -1,0 +1,419 @@
+---
+title: "Parental loss from a global perspective"
+author:
+  - name: Benjamin-Samuel Schluter
+    affiliation: A
+    footnote:
+      - corresp
+  - name: Antonino Polizzi
+    affiliation: B 
+  - name: Diego Alburez-Gutierrez
+    affiliation: C
+  - name: Monica Alexander
+    affiliation: A
+address:
+  - code: A
+    address: Department of Statistical Sciences, University of Toronto, Canada
+  - code: B
+    address: Leverhulme Centre for Demographic Science, University of Oxford, England
+  - code: C
+    address: Max Planck Institute for Demographic Research, Germany
+footnote:
+  - code: corresp
+    text: "benjamin.schluter@utoronto.ca."
+bibliography: refs.bib
+csl: demographic-research.csl
+link-citations: TRUE
+output:
+  bookdown::pdf_document2:
+    toc: FALSE
+    keep_tex: TRUE
+    template: generic_article_template.tex
+    #md_extensions: "-autolink_bare_uris"
+    number_sections: TRUE
+    citation_package: default # Can also be "natbib"
+geometry: "margin=25mm"
+papersize: letter
+fontsize: 11pt
+endfloat: FALSE # Set to TRUE to turn on latex endfloat package to place figures and tables at end of document
+numberlines: FALSE
+authblk: TRUE # FALSE = author affiliations in footnotes; TRUE = author affiliations in a block below author names
+footnotehyper: FALSE # TRUE will give you enhanced table footnote capabilities. Set to FALSE to be able to use French blocks. Needed due to what appears to be a latex bug.
+urlcolor: blue
+linkcolor: blue
+citecolor: blue
+graphics: TRUE # Needed to be able to include images
+tables: TRUE # Needed to be able to include tables
+always_allow_html: true
+abstract: "150 words"
+---
+
+
+
+```{r chunk-options, echo=FALSE}
+
+## Global chunk options --------------------------------------------------------
+
+knitr::opts_chunk$set(echo = FALSE)
+
+```
+
+
+```{r pkg-data, warning=FALSE, message=FALSE}
+
+## Load packages ---------------------------------------------------------------
+
+## Install/load packages
+packages <- c("tidyverse", "ggplot2", "here", "viridis")
+for(p in packages){
+    if(!require(p,character.only = TRUE)) install.packages(p)
+    library(p,character.only = TRUE)
+}
+
+
+
+## Functions -------------------------------------------------------------------
+
+## Script containing the functions computing
+## the main elements required to run the kin dynamics
+
+
+
+## Load data -------------------------------------------------------------------
+
+df_birth = readRDS(here("data", "df_birth_example_countries.rda"))
+
+df_results <- readRDS(here("data", "df_results.rda")) |> 
+  mutate(
+    ## Improve plotting
+    ctry = ifelse(ctry == "United States of America", "USA", ctry),
+    sex = ifelse(sex == "mother", "Mother", "Father")
+    )  |> 
+  ## Having four countries makes the plotting easier
+  filter(ctry != "Germany")
+
+
+
+## Key dimensions --------------------------------------------------------------
+ 
+countries <- unique(df_results$ctry)
+
+```
+
+
+```{r plot-theme}
+
+## plot theme
+theme_plot <- function() {
+  
+  theme_bw() +
+    theme(
+      ## legend
+      legend.position = "top",
+      legend.title = element_blank(),
+      legend.text = element_text(size = 11),
+      
+      ## axes
+      axis.title.x = element_blank(),
+      
+      ## facets
+      strip.background=element_blank(),
+      strip.text = element_text(face = "bold", size = 10),
+      panel.border = element_blank(),
+      axis.line = element_line(color = 'black')
+      )
+}
+
+```
+
+
+# Introduction
+
+
+
+# Data and Method
+
+@caswell2019formal
+
+
+
+# Preliminary Results
+
+```{r, message=FALSE, warning=FALSE, fig.cap="Share of children bereaved across selected countries and years"}
+
+## cod data available from year 1990
+## !! years 1950  to 1990, assumed causes where
+## having equal prob of dying !!
+df_results |> 
+    filter(
+        ## assume stable population in 1950 but focus on children 
+        ## aged < 18 yo, so good to focus on years > 1968
+        year >= 1970,
+        ## model assumes parent alive at birth of child
+        age > 0,
+        ## focus on children aged < 18
+        age < 18
+        ) |>
+    ## Sum prop of born children losing parent from 
+    ## all different causes over ages 1 to 17 yo
+    group_by(
+      sex, year, ctry
+      ) |> 
+    summarise(
+      perc = sum(perc)
+      ) |> 
+    ungroup() |> 
+    ggplot(aes(x = year, y = perc, col = ctry)) +
+    facet_wrap(~ sex) +
+    geom_line(linewidth = 1) +
+    theme_plot() + 
+    labs(y = "Percentage of born children losing a parent",
+         x = "Year")
+
+```
+
+! FIGURE LABEL !
+
+```{r, message=FALSE, warning=FALSE, fig.cap="Share of children bereaved by three main causes across selected countries and years"}
+
+## nber of causes considered
+top.n <- 3
+
+## causes killing the most parent 
+## for children aged < 18 yo
+main.causes <- sapply(countries, function(c) {
+  
+  df_results |> 
+    filter(
+      ## CoD data from 1990
+      year >= 1990,
+      ## model assumes parent alive at birth of child
+      age > 0,
+      ## focus on children aged < 18
+      age < 18,
+      ## looping on country
+      ctry == c
+    ) |>
+    ## Sum prop of born children losing parent by
+    ## causes over ages 1 to 17 yo
+    group_by(
+      sex, cause
+    ) |> 
+    summarise(
+      N = sum(N)
+    ) |> 
+    arrange(
+      sex, desc(N)
+    ) |> 
+    group_by(
+      sex
+    ) |> 
+    slice_max(
+      order_by = N,
+      n = top.n
+    )
+}, 
+simplify = FALSE,
+USE.NAMES = TRUE
+)
+
+## Remove repetition of causes
+causes <- unique(do.call("rbind", main.causes)$cause)
+
+## Associate a color to a cause
+cols <- c("cornflowerblue", "cadetblue2", "deepskyblue", 
+          "darkorange1", "coral4", "red2",
+          "yellow2", "darkgrey", "blue4")
+names(cols) <- causes
+
+## Extract legend corresponding to the main causes of death
+## found across the different countries (don't care about plot
+## in itself)
+plot_legend <- df_results |> 
+  filter(cause %in% causes) |> 
+  ggplot(aes(x = year, y = perc, col = cause)) + 
+  facet_grid(ctry ~ sex) +
+  geom_line(linewidth = 2) +
+  theme_bw() +
+  scale_color_manual(values = cols) +
+  labs(col = "Parental cause of death") +
+  guides(col=guide_legend(ncol=2))
+
+common.legend <- cowplot::get_legend(plot_legend)
+
+## Store plot in a list
+list.fig.share.by.cause <- lapply(countries, function(c) {
+  
+  df_results |> 
+    filter(
+      ## CoD data from 1990
+      year >= 1990,
+      ## model assumes parent alive at birth of child
+      age > 0,
+      ## focus on children aged < 18
+      age < 18,
+      ## looping on country
+      ctry == c,
+      ## filtering main causes of death of each country by sex
+      (sex == "Mother" & cause %in% main.causes[[c]]$cause[main.causes[[c]]$sex == "Mother"]) |
+        (sex == "Father" & cause %in% main.causes[[c]]$cause[main.causes[[c]]$sex == "Father"])
+    ) |>
+    ## Sum prop of born children losing parent from 
+    ## all different causes over ages 1 to 17 yo
+    group_by(
+      sex, year, cause
+    ) |> 
+    summarise(
+      perc = sum(perc)
+    ) |> 
+    ungroup() |> 
+    ggplot(aes(x = year, y = perc, col = cause)) +
+    facet_wrap(~ sex) +
+    geom_line(linewidth = 1) +
+    theme_plot() + 
+    theme(legend.position = "none",
+          panel.spacing = unit(0.5, "cm")) +
+    scale_color_manual(values = cols) +
+    scale_x_continuous(breaks = seq(1990, 2020, 15)) +
+    labs(y = "% of born children ")
+  
+}) 
+
+## plot of countries
+fig <- cowplot::plot_grid(plotlist = list.fig.share.by.cause,
+                          labels = countries,
+                          label_size = 11,
+                          label_x = 0.55,
+                          hjust = 0.5,
+                          ncol = 2)
+## final plot adding the legend
+cowplot::plot_grid(fig, 
+                   common.legend,
+                   ncol = 1,
+                   rel_heights = c(2,1)
+)
+
+```
+
+CHECK IN DF SEEMS LIKE N = PROB_BER WHEN SUMMING OVER SEX
+
+```{r, message=FALSE, warning=FALSE, fig.cap="YYY"}
+
+ex.countries <- c("Mexico", "Afghanistan")
+ex.year <- 2019
+big.causes <- c("Cardiovascular diseases",
+                "Neoplasms")
+## nber of causes considered
+top.n <- 10
+
+## causes killing the most parent 
+## for children aged < 18 yo
+main.causes <- sapply(ex.countries, function(c) {
+  
+  df_results |> 
+    filter(
+      ## model assumes parent alive at birth of child
+      age > 0,
+      ctry == c,
+      year == 2019,
+      !(cause %in% big.causes)
+    ) |>
+    ## Get outputs for both parents combined
+    ## (= losing at least one parent)
+    ## Sum death over parent sex
+    group_by(
+      ctry, year, cause, age
+    ) |>
+    summarise(
+      N = sum(N)
+    ) |> 
+    ungroup() |> 
+    mutate(
+      ## Bereavement prob of losing >= 1 parent
+      prob_ber = 1 - (1 - (N / 2))^2
+    ) |> 
+    group_by(cause) |> 
+    summarise(prob_ber = sum(prob_ber)) |> 
+    ungroup() |> 
+    slice_max(
+      order_by = prob_ber,
+      n = top.n
+    )
+}, 
+simplify = FALSE,
+USE.NAMES = TRUE
+)
+
+## Remove repetition of causes
+causes <- unique(do.call("rbind", main.causes)$cause)
+
+## Associate a color to a cause
+cols <- c("black", "lightgray",
+          "cornflowerblue", "cadetblue2", "deepskyblue", 
+          "darkorange1", "coral4", "red2", "pink",
+          "yellow2", "darkgrey", "blue4",
+          "blueviolet", "darkslategray")
+names(cols) <- c(big.causes, as.character(causes))
+
+
+fig <- df_results |> 
+  filter(
+    ## model assumes parent alive at birth of child
+    age > 0,
+    ctry %in% ex.countries,
+    year == 2019
+  ) |>
+  ## Get outputs for both parents combined
+  ## (= losing at least one parent)
+  ## Sum death over parent sex
+  group_by(
+    ctry, year, cause, age
+  ) |>
+  summarise(
+    N = sum(N)
+  ) |> 
+  ungroup() |> 
+  mutate(
+    ## Bereavement prob of losing >= 1 parent
+    prob_ber = 1 - (1 - (N / 2))^2,
+    ## Separate causes of death
+    cause.gp = case_when(
+      cause %in% big.causes ~ "A",
+      TRUE ~ "B"
+    )
+  ) |> 
+  ggplot(aes(x = age, y = prob_ber, fill = cause)) +
+  facet_grid(cause.gp ~ ctry) +
+  geom_area(alpha = .9, color = "white") +
+  theme_plot() +
+  theme(legend.position = "right",
+        legend.title = element_text(),
+        axis.title.x = element_text()) +
+  scale_fill_manual(values = cols) +
+  labs(y = "Cause-specific prob. of losing at least one parent",
+       x = "Child's life course (age in years)", 
+       fill = "Parental cause of death")
+
+common.legend <- cowplot::get_legend(fig)
+
+## final plot adding the legend
+cowplot::plot_grid(fig +
+                     theme(legend.position = "none"), 
+                   common.legend,
+                   ncol = 2,
+                   rel_widths = c(2,1)
+)  
+
+```
+
+
+# Next Steps & Extensions
+
+* Validation on US and Mexico
+
+\newpage
+
+
+# References {-}
+
+<div id="refs"></div>

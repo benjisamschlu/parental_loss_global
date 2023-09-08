@@ -27,7 +27,6 @@ for(p in packages){
 df_rates_un = readRDS(here("data_raw", "data_rates_unwpp.rda"))
 df_birth_un = readRDS(here("data_raw", "data_birth_unwpp.rda"))
 df_gbd = readRDS(here("data_raw", "gbd-harmonized.RDS"))
-df_causes = readRDS(here("data_raw", "gbd-causes.RDS"))
 
 
 
@@ -84,8 +83,8 @@ saveRDS(
 
 ## Select a sample of countries for data size (Github) & computation time ------
 
-countries <- c("United States of America", "Senegal", "Germany", 
-               "Mexico", "Afghanistan", "China")
+countries <- c("United States of America", "Zimbabwe", "Germany", 
+               "Mexico", "Afghanistan")
 
 df_ex_countries <- df_joined %>% 
     filter(ctry %in% countries)
