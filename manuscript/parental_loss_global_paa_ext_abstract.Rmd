@@ -1,7 +1,7 @@
 ---
 title: "Parental loss from a global perspective"
 author:
-  - name: Benjamin-Samuel Schluter
+  - name: Benjamin-Samuel Schlüter
     affiliation: A
     footnote:
       - corresp
@@ -10,7 +10,7 @@ author:
   - name: Diego Alburez-Gutierrez
     affiliation: C
   - name: Monica Alexander
-    affiliation: A
+    affiliation: D
 address:
   - code: A
     address: Department of Statistical Sciences, University of Toronto, Canada
@@ -18,6 +18,8 @@ address:
     address: Leverhulme Centre for Demographic Science, University of Oxford, England
   - code: C
     address: Max Planck Institute for Demographic Research, Germany
+  - code: D
+    address: Departments of Statistical Sciences and Sociology, University of Toronto, Canada
 footnote:
   - code: corresp
     text: "benjamin.schluter@utoronto.ca."
@@ -110,15 +112,16 @@ theme_plot <- function() {
     theme(
       ## legend
       legend.position = "top",
-      legend.title = element_blank(),
-      legend.text = element_text(size = 11),
+      legend.title = element_text(size = 8),
+      legend.text = element_text(size = 7),
       
       ## axes
-      axis.title.x = element_blank(),
+      axis.title = element_text(size = 10),
+      axis.text = element_text(size = 9),
       
       ## facets
       strip.background=element_blank(),
-      strip.text = element_text(face = "bold", size = 10),
+      strip.text = element_text(face = "bold", size = 8),
       panel.border = element_blank(),
       axis.line = element_line(color = 'black')
       )
@@ -133,48 +136,117 @@ theme_plot <- function() {
 
 # Data and Method
 
-@caswell2019formal
+Two sources of data were needed in order to estimate the worldwide parental loss by cause of death: cause-specific mortality, and life table data with its associated population counts, fertility rates and birth counts.
+
+Period *life table data* by 1-year age class (0, 1, 2, ..., 100+) and sex, grouped in one calendar year were obtained from the UN world population prospects [@united2022world]. All the life table functions (e.g. age-specific probabilities of dying and surviving) were retrieved from this data source. Yearly age-specific *fertilty rates* for females aged 15 to 49 years old and *population counts* by 1-year age group and sex were also obtained from this source. 
+
+*Cause of death* information was obtained from modeled data from the @ihme2019gbd. Cause of death information was collected from this source for ages 0, 1-4, and then in five-year age groups until the open age-group 95 and more. We converted these counts into 1-year age group until age 100+, using a penalized composite link model [@rizzi2015efficient]. Twenty-two causes of death were selected corresponding to the level two of the GBD hierarchy of causes.
+
+We used the kinship matrix model [@caswell2019formal] where the projected kin was the parent (mother and father).  
+The model combined several extensions to use time-varying and sex-differentiated vital rates while accounting for death from multiple causes [@caswell2021formal; @caswell2022formal; @caswell2023formal]. The parents' dynamics can be expressed as follows
+
+$$\begin{pmatrix} \boldsymbol{d}^f_L \\ 
+\boldsymbol{d}^m_L \\ 
+\hline \boldsymbol{d}^f_D \\ 
+\boldsymbol{d}^m_D 
+\end{pmatrix}(x+1, t+1) = 
+\left(\begin{array}{@{}c|c@{}}
+  \begin{matrix} 
+  \boldsymbol{U}^f_t & \boldsymbol{0} \\ 
+  \boldsymbol{0} & \boldsymbol{U}^m_t 
+  \end{matrix} & \boldsymbol{0} \\
+\hline
+\begin{matrix} 
+  \boldsymbol{M}^f_t & \boldsymbol{0} \\ 
+  \boldsymbol{0} & \boldsymbol{M}^m_t 
+  \end{matrix} & \boldsymbol{0} \\
+\end{array}\right)
+\begin{pmatrix} \boldsymbol{d}^f_L \\ 
+\boldsymbol{d}^m_L \\ 
+\hline \boldsymbol{d}^f_D \\ 
+\boldsymbol{d}^m_D
+\end{pmatrix}(x, t)$$
+
+where the matrix $\boldsymbol{U}_t$ of dimension $(\omega \times \omega)$ contains the survival probabilities on its main subdiagonal; the matrix $\boldsymbol{M}_t$ of dimension $(\alpha\omega \times \omega)$ contains the probabilities of dying from the causes considered on its main diagonals; $\boldsymbol{d}_L$ refers to the age distribution of the parent living and $\boldsymbol{d}_D$ reflects the age distribution of the parent dying by cause, in year $t$ when a child is aged $x$; upper scripts $f$ and $m$ corresponds to female and male, respectively; subscript $t$ refers to the year; $\omega=101$ which was the number of ages considered and $\alpha=22$ as we considered twenty-two different causes of death. The block matrix on the right-hand side allows to project the parents' age distribution (alive or dead) over time, as their child ages. The model is fit on each country separately.  
+The model requires as input the age distribution of parents of offspring (see @caswell2021formal for more details). We assumed that in a given year $t$, both parents were alive at the time of birth and the age distribution of parents at the birth of their child (when $x=0$) is expressed as $\boldsymbol{\pi_t} = \frac{\boldsymbol{f}_t \circ \boldsymbol{n}_t}{||\boldsymbol{f}_t \circ \boldsymbol{n}_t||}$, where $\boldsymbol{f}_t$ is a vector of dimension $(\omega \times 1)$ containing age-specific fertility rates and $\boldsymbol{n}_t$ is a vector of dimension $(\omega \times 1)$ being the age distribution of the overall population. Hence, at the birth of a child in year $t$, 
+
+$$\begin{pmatrix} \boldsymbol{d}^f_L \\ 
+\boldsymbol{d}^m_L \\ 
+\hline \boldsymbol{d}^f_D \\ 
+\boldsymbol{d}^m_D 
+\end{pmatrix}(0, t)
+=
+\begin{pmatrix} \boldsymbol{\pi_t}^f \\ 
+\boldsymbol{\pi_t}^m \\ 
+\hline \boldsymbol{0} \\ 
+\boldsymbol{0} 
+\end{pmatrix}
+$$
+
+We assumed that female and male age-specific fertility rates were equal as the UN does not provide male fertility. 
+Cause-specific mortality was not available for the period 1950-1990. During this period, we simplified the block-matrix to only contain survival probabilities, meaning that we only projected the age distribution of parents alive before 1990 ($\boldsymbol{M}_t = \boldsymbol{0}$ for $t < 1990$). We additionally recorded the age distribution of parents dying by cause from 1990 onward. As it is commonly done in these models, before 1950, we assumed that the earliest available rates have been operating for a long time (stable population assumption). 
+
+Two metrics - obtained using outputs from the parents' dynamics - were of particular interest. First, the probability of bereavement of a randomly selected child in the population was approximated by
+
+$$\text{Prob.(losing at least one parent)}(x,t)=1-(1-d_t/2)^2$$
+
+where $d_t$ represents the mean number of dead parent at age $x$ of their child in year $t$ [@caswell2023formal].  
+Second, the percentage of born children aged less than 18 years old losing a parent in year $t$ ($PCLP_t$). We computed it as follows
+
+$$PCLP_t = \frac{\sum^{17}_{x=0}(l_{x,t} \cdot B_t) \cdot \text{Prob.(losing at least one parent)}(x,t)}{B_t}$$
+
+where $l_{x,t}$ corresponds to the fraction of the hypothetical cohort surviving to age $x$ in the period life table for both sex combined in year $t$ (using the same data as for $\boldsymbol{U_t}$ but not differentiating by sex); and $B_t$ is the number of births in year $t$. This metric can also be made cause-specific by replacing $\text{Prob.(losing at least one parent)}(x,t)$ by $\text{Prob.(losing at least one parent due to cause i)}(x,t)$. 
 
 
 
 # Preliminary Results
 
-```{r, message=FALSE, warning=FALSE, fig.cap="Share of children bereaved across selected countries and years"}
+* Percentages always higher for father relative to mother (Fig. \@ref(fig:perc-ber-all)).
+
+* Recent increase in Afghanistan driven by violent death (Fig. \@ref(fig:perc-ber-all)-\@ref(fig:perc-ber-top)).
+
+* HIV epidemics visible for Zimbabwe (Fig. \@ref(fig:perc-ber-all)-\@ref(fig:perc-ber-top)).
+
+```{r perc-ber-all, message=FALSE, warning=FALSE, fig.cap="Percentage of children losing a parent, by parent sex and country over period 1970-2019"}
 
 ## cod data available from year 1990
 ## !! years 1950  to 1990, assumed causes where
 ## having equal prob of dying !!
 df_results |> 
-    filter(
-        ## assume stable population in 1950 but focus on children 
-        ## aged < 18 yo, so good to focus on years > 1968
-        year >= 1970,
-        ## model assumes parent alive at birth of child
-        age > 0,
-        ## focus on children aged < 18
-        age < 18
-        ) |>
-    ## Sum prop of born children losing parent from 
-    ## all different causes over ages 1 to 17 yo
-    group_by(
-      sex, year, ctry
-      ) |> 
-    summarise(
-      perc = sum(perc)
-      ) |> 
-    ungroup() |> 
-    ggplot(aes(x = year, y = perc, col = ctry)) +
-    facet_wrap(~ sex) +
-    geom_line(linewidth = 1) +
-    theme_plot() + 
-    labs(y = "Percentage of born children losing a parent",
-         x = "Year")
+  filter(
+    ## assume stable population in 1950 but focus on children 
+    ## aged < 18 yo, so good to focus on years > 1968
+    year >= 1970,
+    ## model assumes parent alive at birth of child
+    age > 0,
+    ## focus on children aged < 18
+    age < 18
+  ) |>
+  ## Sum prop of born children losing parent from 
+  ## all different causes over ages 1 to 17 yo
+  group_by(
+    sex, year, ctry
+  ) |> 
+  summarise(
+    perc = sum(perc)
+  ) |> 
+  ungroup() |> 
+  ggplot(aes(x = year, y = perc, col = ctry)) +
+  facet_wrap(~ sex) +
+  geom_line(linewidth = 1) +
+  theme_plot() + 
+  theme(legend.title = element_blank(),
+        axis.title.x = element_blank()) +
+  labs(y = "% bereaved children",
+       x = "Year")
 
 ```
 
-! FIGURE LABEL !
+* Afghanistan and Mexico: top three parental causes of death vary between mother and father (Fig. \@ref(fig:perc-ber-top)).
 
-```{r, message=FALSE, warning=FALSE, fig.cap="Share of children bereaved by three main causes across selected countries and years"}
+* Global South: general downward trend except for father due to violent death in Mexico and Afghanistan, and HIV in Zimbabwe (Fig. \@ref(fig:perc-ber-top)). 
+
+```{r perc-ber-top, message=FALSE, warning=FALSE, fig.cap="Percentage of children losing a parent, by parent sex and country top three causes of parental death over period 1990-2019"}
 
 ## nber of causes considered
 top.n <- 3
@@ -272,10 +344,12 @@ list.fig.share.by.cause <- lapply(countries, function(c) {
     geom_line(linewidth = 1) +
     theme_plot() + 
     theme(legend.position = "none",
-          panel.spacing = unit(0.5, "cm")) +
+          panel.spacing = unit(0.35, "cm"),
+        axis.title.x = element_blank()) +
     scale_color_manual(values = cols) +
-    scale_x_continuous(breaks = seq(1990, 2020, 15)) +
-    labs(y = "% of born children ")
+    scale_x_continuous(breaks = c(seq(1990, 2005, 15), 2019),
+                       limits = c(1990, 2020)) +
+    labs(y = "% bereaved children")
   
 }) 
 
@@ -295,9 +369,13 @@ cowplot::plot_grid(fig,
 
 ```
 
-CHECK IN DF SEEMS LIKE N = PROB_BER WHEN SUMMING OVER SEX
+* Difference in the level of bereavement probability (Fig. \@ref(fig:ber-prob)).
 
-```{r, message=FALSE, warning=FALSE, fig.cap="YYY"}
+* Difference in the mix of causes between the two countries (Fig. \@ref(fig:ber-prob)).
+
+* Self-harm and transport injuries kill parents when their child are young (Fig. \@ref(fig:ber-prob)). 
+
+```{r ber-prob, message=FALSE, warning=FALSE, fig.cap="Age- and cause-specific bereavement probabilities of losing at least one parent, by country top twelve causes in 2019"}
 
 ex.countries <- c("Mexico", "Afghanistan")
 ex.year <- 2019
@@ -353,10 +431,10 @@ cols <- c("black", "lightgray",
           "darkorange1", "coral4", "red2", "pink",
           "yellow2", "darkgrey", "blue4",
           "blueviolet", "darkslategray")
-names(cols) <- c(big.causes, as.character(causes))
+names(cols) <- c(big.causes, sort(as.character(causes)))
 
 
-fig <- df_results |> 
+df_results |> 
   filter(
     ## model assumes parent alive at birth of child
     age > 0,
@@ -378,38 +456,42 @@ fig <- df_results |>
     prob_ber = 1 - (1 - (N / 2))^2,
     ## Separate causes of death
     cause.gp = case_when(
-      cause %in% big.causes ~ "A",
-      TRUE ~ "B"
+      cause %in% big.causes ~ "Cardiovascular + Neoplasms",
+      TRUE ~ "Top 10 causes"
+    ),
+    ## Order causes for plot
+    cause = factor(
+      cause,
+      levels = names(cols),
+      labels = names(cols)
     )
   ) |> 
   ggplot(aes(x = age, y = prob_ber, fill = cause)) +
   facet_grid(cause.gp ~ ctry) +
   geom_area(alpha = .9, color = "white") +
   theme_plot() +
-  theme(legend.position = "right",
-        legend.title = element_text(),
-        axis.title.x = element_text()) +
+  theme(legend.position = "right") +
   scale_fill_manual(values = cols) +
   labs(y = "Cause-specific prob. of losing at least one parent",
        x = "Child's life course (age in years)", 
        fill = "Parental cause of death")
-
-common.legend <- cowplot::get_legend(fig)
-
-## final plot adding the legend
-cowplot::plot_grid(fig +
-                     theme(legend.position = "none"), 
-                   common.legend,
-                   ncol = 2,
-                   rel_widths = c(2,1)
-)  
+  
 
 ```
 
 
 # Next Steps & Extensions
 
-* Validation on US and Mexico
+* All countries
+
+* Uncertainty measures using posterior draws/95% credible intervals
+
+* Validation with empirical data on US and Mexico
+
+* Projection using UN WPP projection estimates
+
+* Improve assumption about fertility of males
+
 
 \newpage
 

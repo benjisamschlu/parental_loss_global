@@ -155,6 +155,7 @@
 \MyNewLabel{ADDRTXT}{A}{Department of Statistical Sciences, University of Toronto, Canada}
 \MyNewLabel{ADDRTXT}{B}{Leverhulme Centre for Demographic Science, University of Oxford, England}
 \MyNewLabel{ADDRTXT}{C}{Max Planck Institute for Demographic Research, Germany}
+\MyNewLabel{ADDRTXT}{D}{Departments of Statistical Sciences and Sociology, University of Toronto, Canada}
 
 % Create labels for Footnotes if they are given by code
 \MyNewLabel{ANOTETXT}{corresp}{\href{mailto:benjamin.schluter@utoronto.ca}{\nolinkurl{benjamin.schluter@utoronto.ca}}.}
@@ -219,7 +220,7 @@
 \addrlblbycode{A}%
 ,%
 $\anotelblbycode{corresp}$%
-]{Benjamin-Samuel Schluter}
+]{Benjamin-Samuel Schlüter}
 
 \addrbycode{A}
 
@@ -246,15 +247,15 @@ $\anotelblbycode{corresp}$%
 \addrbycode{C}
 
 
-\createaddrlblbycode{A}
+\createaddrlblbycode{D}
 
 
 
 \author[%
-\addrlblbycode{A}%
+\addrlblbycode{D}%
 ]{Monica Alexander}
 
-\addrbycode{A}
+\addrbycode{D}
 
 
 %endif(authblk)
@@ -282,40 +283,127 @@ $\anotelblbycode{corresp}$%
 \hypertarget{data-and-method}{%
 \section{Data and Method}\label{data-and-method}}
 
-Caswell (\protect\hyperlink{ref-caswell2019formal}{2019})
+Two sources of data were needed in order to estimate the worldwide parental loss by cause of death: cause-specific mortality, and life table data with its associated population counts, fertility rates and birth counts.
+
+Period \emph{life table data} by 1-year age class (0, 1, 2, \ldots, 100+) and sex, grouped in one calendar year were obtained from the UN world population prospects (\protect\hyperlink{ref-united2022world}{United Nations 2022}). All the life table functions (e.g.~age-specific probabilities of dying and surviving) were retrieved from this data source. Yearly age-specific \emph{fertilty rates} for females aged 15 to 49 years old and \emph{population counts} by 1-year age group and sex were also obtained from this source.
+
+\emph{Cause of death} information was obtained from modeled data from the Institute for Health Metrics and Evaluation (\protect\hyperlink{ref-ihme2019gbd}{2019}). Cause of death information was collected from this source for ages 0, 1-4, and then in five-year age groups until the open age-group 95 and more. We converted these counts into 1-year age group until age 100+, using a penalized composite link model (\protect\hyperlink{ref-rizzi2015efficient}{Rizzi, Gampe, and Eilers 2015}). Twenty-two causes of death were selected corresponding to the level two of the GBD hierarchy of causes.
+
+We used the kinship matrix model (\protect\hyperlink{ref-caswell2019formal}{Caswell 2019}) where the projected kin was the parent (mother and father).\\
+The model combined several extensions to use time-varying and sex-differentiated vital rates while accounting for death from multiple causes (\protect\hyperlink{ref-caswell2022formal}{Caswell 2022}; \protect\hyperlink{ref-caswell2023formal}{Caswell, Margolis, and Verdery 2023}; \protect\hyperlink{ref-caswell2021formal}{Caswell and Song 2021}). The parents' dynamics can be expressed as follows
+
+\[\begin{pmatrix} \boldsymbol{d}^f_L \\ 
+\boldsymbol{d}^m_L \\ 
+\hline \boldsymbol{d}^f_D \\ 
+\boldsymbol{d}^m_D 
+\end{pmatrix}(x+1, t+1) = 
+\left(\begin{array}{@{}c|c@{}}
+  \begin{matrix} 
+  \boldsymbol{U}^f_t & \boldsymbol{0} \\ 
+  \boldsymbol{0} & \boldsymbol{U}^m_t 
+  \end{matrix} & \boldsymbol{0} \\
+\hline
+\begin{matrix} 
+  \boldsymbol{M}^f_t & \boldsymbol{0} \\ 
+  \boldsymbol{0} & \boldsymbol{M}^m_t 
+  \end{matrix} & \boldsymbol{0} \\
+\end{array}\right)
+\begin{pmatrix} \boldsymbol{d}^f_L \\ 
+\boldsymbol{d}^m_L \\ 
+\hline \boldsymbol{d}^f_D \\ 
+\boldsymbol{d}^m_D
+\end{pmatrix}(x, t)\]
+
+where the matrix \(\boldsymbol{U}_t\) of dimension \((\omega \times \omega)\) contains the survival probabilities on its main subdiagonal; the matrix \(\boldsymbol{M}_t\) of dimension \((\alpha\omega \times \omega)\) contains the probabilities of dying from the causes considered on its main diagonals; \(\boldsymbol{d}_L\) refers to the age distribution of the parent living and \(\boldsymbol{d}_D\) reflects the age distribution of the parent dying by cause, in year \(t\) when a child is aged \(x\); upper scripts \(f\) and \(m\) corresponds to female and male, respectively; subscript \(t\) refers to the year; \(\omega=101\) which was the number of ages considered and \(\alpha=22\) as we considered twenty-two different causes of death. The block matrix on the right-hand side allows to project the parents' age distribution (alive or dead) over time, as their child ages. The model is fit on each country separately.\\
+The model requires as input the age distribution of parents of offspring (see Caswell and Song (\protect\hyperlink{ref-caswell2021formal}{2021}) for more details). We assumed that in a given year \(t\), both parents were alive at the time of birth and the age distribution of parents at the birth of their child (when \(x=0\)) is expressed as \(\boldsymbol{\pi_t} = \frac{\boldsymbol{f}_t \circ \boldsymbol{n}_t}{||\boldsymbol{f}_t \circ \boldsymbol{n}_t||}\), where \(\boldsymbol{f}_t\) is a vector of dimension \((\omega \times 1)\) containing age-specific fertility rates and \(\boldsymbol{n}_t\) is a vector of dimension \((\omega \times 1)\) being the age distribution of the overall population. Hence, at the birth of a child in year \(t\),
+
+\[\begin{pmatrix} \boldsymbol{d}^f_L \\ 
+\boldsymbol{d}^m_L \\ 
+\hline \boldsymbol{d}^f_D \\ 
+\boldsymbol{d}^m_D 
+\end{pmatrix}(0, t)
+=
+\begin{pmatrix} \boldsymbol{\pi_t}^f \\ 
+\boldsymbol{\pi_t}^m \\ 
+\hline \boldsymbol{0} \\ 
+\boldsymbol{0} 
+\end{pmatrix}
+\]
+
+We assumed that female and male age-specific fertility rates were equal as the UN does not provide male fertility.
+Cause-specific mortality was not available for the period 1950-1990. During this period, we simplified the block-matrix to only contain survival probabilities, meaning that we only projected the age distribution of parents alive before 1990 (\(\boldsymbol{M}_t = \boldsymbol{0}\) for \(t < 1990\)). We additionally recorded the age distribution of parents dying by cause from 1990 onward. As it is commonly done in these models, before 1950, we assumed that the earliest available rates have been operating for a long time (stable population assumption).
+
+Two metrics - obtained using outputs from the parents' dynamics - were of particular interest. First, the probability of bereavement of a randomly selected child in the population was approximated by
+
+\[\text{Prob.(losing at least one parent)}(x,t)=1-(1-d_t/2)^2\]
+
+where \(d_t\) represents the mean number of dead parent at age \(x\) of their child in year \(t\) (\protect\hyperlink{ref-caswell2023formal}{Caswell, Margolis, and Verdery 2023}).\\
+Second, the percentage of born children aged less than 18 years old losing a parent in year \(t\) (\(PCLP_t\)). We computed it as follows
+
+\[PCLP_t = \frac{\sum^{17}_{x=0}(l_{x,t} \cdot B_t) \cdot \text{Prob.(losing at least one parent)}(x,t)}{B_t}\]
+
+where \(l_{x,t}\) corresponds to the fraction of the hypothetical cohort surviving to age \(x\) in the period life table for both sex combined in year \(t\) (using the same data as for \(\boldsymbol{U_t}\) but not differentiating by sex); and \(B_t\) is the number of births in year \(t\). This metric can also be made cause-specific by replacing \(\text{Prob.(losing at least one parent)}(x,t)\) by \(\text{Prob.(losing at least one parent due to cause i)}(x,t)\).
 
 \hypertarget{preliminary-results}{%
 \section{Preliminary Results}\label{preliminary-results}}
 
+\begin{itemize}
+\item
+  Percentages always higher for father relative to mother (Fig. \ref{fig:perc-ber-all}).
+\item
+  Recent increase in Afghanistan driven by violent death (Fig. \ref{fig:perc-ber-all}-\ref{fig:perc-ber-top}).
+\item
+  HIV epidemics visible for Zimbabwe (Fig. \ref{fig:perc-ber-all}-\ref{fig:perc-ber-top}).
+\end{itemize}
+
 \begin{figure}
 \centering
-\includegraphics{parental_loss_global_paa_ext_abstract_files/figure-latex/unnamed-chunk-1-1.pdf}
-\caption{\label{fig:unnamed-chunk-1}Share of children bereaved across selected countries and years}
+\includegraphics{parental_loss_global_paa_ext_abstract_files/figure-latex/perc-ber-all-1.pdf}
+\caption{\label{fig:perc-ber-all}Percentage of children losing a parent, by parent sex and country over period 1970-2019}
 \end{figure}
 
-! FIGURE LABEL !
+\begin{itemize}
+\item
+  Afghanistan and Mexico: top three parental causes of death vary between mother and father (Fig. \ref{fig:perc-ber-top}).
+\item
+  Global South: general downward trend except for father due to violent death in Mexico and Afghanistan, and HIV in Zimbabwe (Fig. \ref{fig:perc-ber-top}).
+\end{itemize}
 
 \begin{figure}
 \centering
-\includegraphics{parental_loss_global_paa_ext_abstract_files/figure-latex/unnamed-chunk-2-1.pdf}
-\caption{\label{fig:unnamed-chunk-2}Share of children bereaved by three main causes across selected countries and years}
+\includegraphics{parental_loss_global_paa_ext_abstract_files/figure-latex/perc-ber-top-1.pdf}
+\caption{\label{fig:perc-ber-top}Percentage of children losing a parent, by parent sex and country top three causes of parental death over period 1990-2019}
 \end{figure}
 
-CHECK IN DF SEEMS LIKE N = PROB\_BER WHEN SUMMING OVER SEX
+\begin{itemize}
+\item
+  Difference in the level of bereavement probability (Fig. \ref{fig:ber-prob}).
+\item
+  Difference in the mix of causes between the two countries (Fig. \ref{fig:ber-prob}).
+\item
+  Self-harm and transport injuries kill parents when their child are young (Fig. \ref{fig:ber-prob}).
+\end{itemize}
 
 \begin{figure}
 \centering
-\includegraphics{parental_loss_global_paa_ext_abstract_files/figure-latex/unnamed-chunk-3-1.pdf}
-\caption{\label{fig:unnamed-chunk-3}YYY}
+\includegraphics{parental_loss_global_paa_ext_abstract_files/figure-latex/ber-prob-1.pdf}
+\caption{\label{fig:ber-prob}Age- and cause-specific bereavement probabilities of losing at least one parent, by country top twelve causes in 2019}
 \end{figure}
 
 \hypertarget{next-steps-extensions}{%
 \section{Next Steps \& Extensions}\label{next-steps-extensions}}
 
 \begin{itemize}
-\tightlist
 \item
-  Validation on US and Mexico
+  All countries
+\item
+  Uncertainty measures using posterior draws/95\% credible intervals
+\item
+  Validation with empirical data on US and Mexico
+\item
+  Projection using UN WPP projection estimates
+\item
+  Improve assumption about fertility of males
 \end{itemize}
 
 \newpage
@@ -328,6 +416,24 @@ CHECK IN DF SEEMS LIKE N = PROB\_BER WHEN SUMMING OVER SEX
 \begin{CSLReferences}{1}{0}
 \leavevmode\vadjust pre{\hypertarget{ref-caswell2019formal}{}}%
 Caswell, H. (2019). The formal demography of kinship. \emph{Demographic Research} 41:679--712.
+
+\leavevmode\vadjust pre{\hypertarget{ref-caswell2022formal}{}}%
+Caswell, H. (2022). The formal demography of kinship IV. \emph{Demographic Research} 47:359--396.
+
+\leavevmode\vadjust pre{\hypertarget{ref-caswell2023formal}{}}%
+Caswell, H., Margolis, R., and Verdery, A.M. (2023). The formal demography of kinship v: Kin loss, bereavement, and causes of death. \emph{SocArXiv}. doi:\href{https://doi.org/10.31235/osf.io/mk64p}{10.31235/osf.io/mk64p}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-caswell2021formal}{}}%
+Caswell, H. and Song, X. (2021). The formal demography of kinship III. \emph{Demographic Research} 45:517--546.
+
+\leavevmode\vadjust pre{\hypertarget{ref-ihme2019gbd}{}}%
+Institute for Health Metrics and Evaluation (2019). \emph{GBD Results}. University of Washington. \url{https://vizhub.healthdata.org/gbd-results/}.
+
+\leavevmode\vadjust pre{\hypertarget{ref-rizzi2015efficient}{}}%
+Rizzi, S., Gampe, J., and Eilers, P.H. (2015). Efficient estimation of smooth distributions from coarsely grouped data. \emph{American Journal of Epidemiology} 182(2):138--147.
+
+\leavevmode\vadjust pre{\hypertarget{ref-united2022world}{}}%
+United Nations (2022). \emph{World Population Prospects 2022: Summary of Results}. UN.
 
 \end{CSLReferences}
 
