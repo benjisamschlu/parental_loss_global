@@ -132,7 +132,13 @@ theme_plot <- function() {
 
 # Introduction
 
+Children are more exposed to their parents today than ever before. Declining fertility has led to shrinking kinship networks in many regions of the world during the 20th century. At the same time, widespread improvements in mortality conditions have increased the shared lifetime between younger and older generations [@bengtson2001nuclear], and, on average, children lose their parents later in life. 
 
+While parental loss is generally viewed as an important life course transition that has the potential to impair physical and mental well-being [@luecken2008parental; @amato2014death; @saarela2018mortality; @li2014mortality], the timing and cause of parental death are important mediators of the bereavement process. The early and sudden loss of a parent has been shown to have a particularly negative impact on the well-being and development of affected children [@leopold2015bereavement; @chen2009education]. Relatedly, violent parental deaths, including deaths from suicide and homicide, have been correlated to a prolonged grieving process, and often guilt (REFERENCE). In contrast, degenerative diseases, such as dementia and Alzheimer’s disease, are associated with increased family caregiver burden before the parental death, with often detrimental effects on the caregivers’ well-being and the quality of family relationships [@alzheimers2022].
+
+Despite the importance of causes of parental death in the bereavement process of children, our knowledge of the cause-of-death patterns in parental loss is limited. Previous research on parental loss has focused on only a subset of causes of death in a small number of countries [@hillis2021global; @hillis2021us; @snyder2022covid; @verdery2020covid]. As countries differ in their mortality and fertility conditions as well as their epidemiological profiles [@united2022world; @owid-causes-of-death], the short- and long-term burden associated with parental loss can be expected to vary across the globe.
+
+In this project, we aim to provide a global assessment of the role of different causes of death in the experience of parental loss. To this end, we apply a formal matrix approach to mortality and fertility data from the United Nations World Population Prospects (UNWPP) and to cause-of-death information from the Global Burden of Disease (GBD) study. In this extended abstract, we present preliminary results for four countries: Afghanistan, Mexico, United States of America (USA), and Zimbabwe.
 
 # Data and Method
 
@@ -201,11 +207,9 @@ where $l_{x,t}$ corresponds to the fraction of the hypothetical cohort surviving
 
 # Preliminary Results
 
-* Percentages always higher for father relative to mother (Fig. \@ref(fig:perc-ber-all)).
+Figure 1 shows the percentage of underage (below age 18) children who ever lost a father (left panel) or mother (right panel) over the period 1970--2019 for the four selected countries, Afghanistan, Mexico, the United States, and Zimbabwe. There are clear differences in country-specific trends over time. In the U.S., the probability of ever having lost a father remained relatively constant over the five decades of observation, at about 5%, while this probability declined sharply between the 1970s and the mid-2000s in Mexico. In Afghanistan, the probability of paternal death also showed a declining trend, with the exception of the periods 1979--1992 and 2017--2019, which were marked by large-scale conflict. Zimbabwe represents an exception to the general trend of low or declining paternal bereavement, with the likelihood of ever having lost a father increasing sharply during the 1980s and 1990s, which coincided with the HIV/AIDS crisis. During the 2010s, the likelihood of paternal bereavement in Zimbabwe started to decline again. 
 
-* Recent increase in Afghanistan driven by violent death (Fig. \@ref(fig:perc-ber-all)-\@ref(fig:perc-ber-top)).
-
-* HIV epidemics visible for Zimbabwe (Fig. \@ref(fig:perc-ber-all)-\@ref(fig:perc-ber-top)).
+While the probability of maternal loss was generally lower than the probability of paternal loss, trends in maternal and paternal bereavement followed similar trends in each country. Probabilities of maternal bereavement were usually affected little by periods of conflict (e.g., Afghanistan in the 1980s, 1977--1979 in Zimbabwe). In the U.S., a pattern of rising maternal bereavement has been emerging since the early 1980s.
 
 ```{r perc-ber-all, message=FALSE, warning=FALSE, fig.cap="Percentage of children losing a parent, by parent sex and country over period 1970-2019"}
 
@@ -242,9 +246,9 @@ df_results |>
 
 ```
 
-* Afghanistan and Mexico: top three parental causes of death vary between mother and father (Fig. \@ref(fig:perc-ber-top)).
+Figure 2 breaks down the probabilities of paternal and maternal bereavement among underage children by causes of death for the period 1990--2019. For each country-sex combination, the probability of paternal and maternal loss is shown for the top three causes of death over the entire thirty-year period.
 
-* Global South: general downward trend except for father due to violent death in Mexico and Afghanistan, and HIV in Zimbabwe (Fig. \@ref(fig:perc-ber-top)). 
+In line with trends displayed in Figure 1, paternal and maternal bereavement from “self-harm and interpersonal violence”, “cardiovascular diseases”, and “neoplasms” in the United States have displayed relatively stagnant trends in the 21st century. Similarly, following the all-cause trends in Figure 1, maternal bereavement from “cardiovascular diseases”, “maternal and neonatal disorders”, and “neoplasms” in Afghanistan and maternal bereavement from “neoplasms”, “cardiovascular diseases”, and “diabetes and kidney diseases” in Mexico showed declining trends, albeit to varying degrees. In Zimbabwe, parental bereavement due to “HIV/AIDS and sexually transmitted infections” clearly stands out as the driver of the all-cause trends shown in Figure 1. At the peak of the HIV/AIDS crisis in Zimbabwe, 15% of children had previously lost their father to “HIV/AIDS and sexually transmitted infections”, while 17.5% of children had previously lost their mother. Finally, offsetting trends among different causes of death were seen for fathers in Afghanistan and Mexico, where, at different time points, high and rising bereavement from “self-harm and interpersonal violence” counteracted improvements in the remaining two causes of death (Afghanistan: “cardiovascular diseases” and “transport injuries”; Mexico: “digestive diseases” and “transport injuries”).
 
 ```{r perc-ber-top, message=FALSE, warning=FALSE, fig.cap="Percentage of children losing a parent, by parent sex and country top three causes of parental death over period 1990-2019"}
 
@@ -369,11 +373,12 @@ cowplot::plot_grid(fig,
 
 ```
 
-* Difference in the level of bereavement probability (Fig. \@ref(fig:ber-prob)).
+Finally, Figure 3 shows the probability (y-axis) of having lost at least one parent (father or mother) by age (x-axis) and cause of death (area color) in Afghanistan (left) and Mexico (right) in the year 2019. The top panels show the probability of parental loss from “cardiovascular diseases” and “neoplasms”, while the bottom panels focus on the remaining top ten causes of death in each country in 2019 (excluding “cardiovascular diseases” and “neoplasms”). 
 
-* Difference in the mix of causes between the two countries (Fig. \@ref(fig:ber-prob)).
+In Afghanistan (XX%), the probability of having lost a parent to any cause was higher in childhood (i.e., at age 18) than in Mexico (XX%). Looking at the bottom panel of Figure 3, it becomes clear that “self-harm and interpersonal violence” and “transport injuries” were the main contributors to this pattern. 
 
-* Self-harm and transport injuries kill parents when their child are young (Fig. \@ref(fig:ber-prob)). 
+The adult peak of parental loss was reached at around age 50 in Afghanistan and at around age 55 in Mexico. While the probability of having lost a parent to “cardiovascular diseases” at the peak age was higher in Afghanistan (XX%) than in Mexico (XX%), the probability of having lost a parent to “neoplasms” was similarly high in both countries (XX% vs. XX%). Similarly, parental loss from “self-harm and interpersonal violence” was more important for parental loss at all ages in Afghanistan. In contrast, “diabetes and kindey diseases”, “digestive diseases”, and “neurological disorders” played a more important role in Mexico.
+
 
 ```{r ber-prob, message=FALSE, warning=FALSE, fig.cap="Age- and cause-specific bereavement probabilities of losing at least one parent, by country top twelve causes in 2019"}
 
@@ -479,8 +484,35 @@ df_results |>
 
 ```
 
+Ben's bullet points:
 
-# Next Steps & Extensions
+* Percentages always higher for father relative to mother (Fig. \@ref(fig:perc-ber-all)).
+
+* Recent increase in Afghanistan driven by violent death (Fig. \@ref(fig:perc-ber-all)-\@ref(fig:perc-ber-top)).
+
+* HIV epidemics visible for Zimbabwe (Fig. \@ref(fig:perc-ber-all)-\@ref(fig:perc-ber-top)).
+
+* Afghanistan and Mexico: top three parental causes of death vary between mother and father (Fig. \@ref(fig:perc-ber-top)).
+
+* Global South: general downward trend except for father due to violent death in Mexico and Afghanistan, and HIV in Zimbabwe (Fig. \@ref(fig:perc-ber-top)). 
+
+* Difference in the level of bereavement probability (Fig. \@ref(fig:ber-prob)).
+
+* Difference in the mix of causes between the two countries (Fig. \@ref(fig:ber-prob)).
+
+* Self-harm and transport injuries kill parents when their child are young (Fig. \@ref(fig:ber-prob)). 
+
+# Summary, Discussion, and Next Steps
+
+In our project, we aim to provide a global assessment of the role of different causes of death in the experience of parental loss. Using a formal matrix approach, our study highlights the stark global differences in the experience of parental loss that still exist today. Although the probability to experience parental loss has generally declined over time, children in the Global South are still more likely to lose a parent. In the second half of the 20th century, many countries in the Global South, such as Afghanistan, Mexico, and Zimbabwe, have experienced short- or longer-term mortality crises resulting from conflicts or epidemics. These mortality crises have temporarily exacerbated experiences of parental loss (as in Afghanistan and Zimbabwe) or slowed down improvements in parental longevity (as in Mexico). Our findings show that in countries such as Afghanistan, Mexico, and Zimbabwe, a large proportion of parental deaths are conflict- or epidemic-related and can occur suddenly in a context already marked by social upheaval. Moreover, in Afghanistan, the high prevalence of mortality from “maternal and neonatal disorders” suggests that many children may grow up without a mother. While parental loss is less common in the United States, a large proportion of bereaved children in the U.S. have lost their father to a violent death. 
+
+The preliminary results presented in this extended abstract represent only a small subset of countries and are subject to two main limitations. First, in many data-scarce contexts, the age-specific mortality and fertility rates and the cause-of-death information provided by UNWPP and GBD represent estimated quantities themselves. Consequently, biases in the mortality and fertility information are carried over to the estimates of parental loss derived from our matrix kinship models. GBD, and in some instances UNWPP, provide uncertainty bounds around their mortality and fertility estimates. For the PAA 2024 annual meeting, we aim to explicitly incorporate this uncertainty in a [Bayesian/bootstrapping/Monte Carlo simulation] framework to derive confidence intervals for our estimates of parental loss. Moreover, for selected countries, such as the United States and Mexico, we plan to conduct robustness checks with cause-of-death information derived directly from vital registration systems.
+
+Second, in the absence of male fertility data, we approximate male fertility rates using an “androgynous model” to derive kin estimates, which assumes that female and male fertility patterns in a given country are identical. Existing information on female and male fertility suggests that the reproductive period of males is generally longer and the mean age of childbirth higher [@dudel2021fertility]. Estimates of kin relationships derived from population registers vs. matrix models for Sweden suggest that the “androgynous model” approximates register-based estimates of different kin relationships reasonably well (results available upon request). For the PAA 2024 annual meeting, we aim to test the sensitivity of our results to different assumptions about male fertility patterns.
+
+Despite these limitations, our study provides important insights into the cause-of-death patterns in parental loss in different world regions. Against general increases in shared lifetime between children and their parents, our results suggest important variations in the short- and long-term burdens associated with parental loss across the globe. Thus, our findings will prove useful in the design of adequate support systems that help underage and adult children in their grieving process and protect children from potential social and economic repercussions arising from the death of their parents.
+
+Ben's bullet points:
 
 * All countries
 
