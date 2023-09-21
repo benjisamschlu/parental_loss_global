@@ -150,12 +150,6 @@ df.results <- df.nber.dth |>
     dplyr::select(
         ctry, year, cause, age, sex, N
         ) |> 
-    mutate(
-        ## Compute prob of bereavement 
-        ## Weird math expression but kept for coherence with 
-        ## prob of at least one parent dies
-        prob_ber = 1 - (1 - (N))
-        ) |> 
     ## Join with nber of surviving children as they ages
     left_join(
         ## Add proportion of surviving children (lx)
@@ -186,10 +180,39 @@ df.results <- df.nber.dth |>
     ) |> 
     mutate(
         ## Nber of children losing a parent (clp)
-        clp = prob_ber * surv.children,
-        ## Share of born children losing a parent
-        perc = (clp/n_birth)*100
+        ## Prevalence of bereavement: 
+        ## Since mother/father age distribution equal 1,
+        ## N is the proportion at each age of mother
+        ## dying.
+        clp = N * surv.children
+    ) |> 
+    ## Ordering ages is of importance for 
+    ## cumsum 
+    arrange(
+        ctry, year, sex, cause, age
+        ) |> 
+    ## Share of born children losing a parent
+    ## as cumulative prevalence
+    group_by(
+        ctry, year, cause, sex
+        ) |> 
+    mutate(
+        cum_N = cumsum(N)
+    ) |> 
+    ungroup()
+
+## Check: cumsum prevalence at age 100 is 1
+df.results |> 
+    filter(
+        age == 100
+    ) |>  
+    group_by(
+        ctry, year, sex 
+    ) |> 
+    summarise(
+        cum_N = sum(cum_N)
     )
+
 
 ## Save outputs
 saveRDS(df.results,
