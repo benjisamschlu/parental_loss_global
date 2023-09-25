@@ -47,7 +47,7 @@ citecolor: blue
 graphics: TRUE # Needed to be able to include images
 tables: TRUE # Needed to be able to include tables
 always_allow_html: true
-abstract: "Parental loss has the potential to impair physical and mental well-being. The timing and cause of parental death are important mediators of the bereavement process. Previous research on parental loss has focused on a subset of causes of death in few countries. We aim to provide a global assessment of the role of different causes of death in the experience of orphanhood. Using estimates from the United Nations World Population Prospects and the Global Burden of Disease study, we apply a formal kinship matrix approach to estimate the probability and causes of parental loss worldwide. Although the probability of orphanhood has generally declined over time, children in the Global South are still more likely to experience bereavement. In countries such as Afghanistan, Mexico, and Zimbabwe, a large proportion of parental deaths are conflict- or epidemic-related. In the United States, the top cause of father bereavement is violent death."
+abstract: "Parental loss has the potential to impair physical and mental well-being. The timing and cause of parental death are important mediators of the bereavement process. Previous research on the probability of parental loss has focused on a subset of causes of death in few countries. We aim to provide a global assessment of the role of different causes of death in the experience of orphanhood. Using estimates from the United Nations World Population Prospects and the Global Burden of Disease study, we apply a formal kinship matrix approach to estimate the probability and causes of parental loss worldwide. Although the probability of orphanhood has generally declined over time, children in the Global South are still more likely to experience bereavement. In countries such as Afghanistan, Mexico, and Zimbabwe, a large proportion of parental deaths are conflict- or epidemic-related. In the United States, the top cause of father bereavement is violent death."
 ---
 
 
@@ -136,20 +136,19 @@ Shared lifetime between children and their parents is longer today than ever bef
 
 While mortality conditions have improved, the presence of premature adult death still means many children lose parents at a young age. Parental bereavement has the potential to impair physical and mental well-being [@luecken2008parental; @amato2014death; @saarela2018mortality; @li2014mortality; @pham2018burden], while the timing and cause of parental death are important mediators of the bereavement process [@li2014mortality]. The early and sudden loss of a parent has been shown to have a particularly negative impact on the well-being and development of affected children [@leopold2015bereavement; @chen2009education; @patterson2020linked]. In contrast, degenerative diseases, such as dementia and Alzheimer’s disease, are associated with increased family caregiver burden before the parental death, with often detrimental effects on the caregivers’ well-being and the quality of family relationships [@alzheimers2022].
 
-Despite the importance of assessing the causes of parental death to fully understand the bereavement process of children, our knowledge of the cause-of-death patterns in parental loss is limited. Previous research on parental loss has focused on a small number of countries to study the effects of Covid-19 [@hillis2021global; @hillis2021us; @snyder2022covid; @verdery2020covid], all-cause mortality (REFERENCE OR DROP ALL CAUSES?), and the HIV/AIDS epidemic [@zagheni2011impact]. 
+Despite the importance of assessing the causes of parental death to fully understand the bereavement process of children, our knowledge of the cause-of-death patterns in parental loss is limited. Previous research on parental loss has focused on a small number of countries to study the effects of Covid-19 [@hillis2021global; @hillis2021us; @snyder2022covid; @verdery2020covid] and the HIV/AIDS epidemic [@zagheni2011impact]. 
 
-Kin loss is not just the product of present mortality rates. The probability of losing a parent is affected by the fertility rates of the parental generation (which determine the number of children 'at risk' of orphanhood'), the past mortality conditions affecting the parental and child generation (i.e., if both parents have already died, a child is no longer at risk of orphanood), and the present mortality conditions (which determine the risk that a parent will die in a given calendar year). Consequently, as countries differ in their mortality and fertility conditions as well as their epidemiological profiles [@united2022world; @owid-causes-of-death], the short- and long-term burden associated with parental loss can be expected to vary across the globe. 
+Kin loss is not just the product of present mortality rates. The probability of losing a parent is affected by the fertility rates of the parental generation (which determine the number of children 'at risk' of orphanhood), the past mortality conditions affecting the parental and child generation (i.e., if both parents have already died, a child is no longer at risk of orphanhood), and the present mortality conditions (which determine the risk that a parent will die in a given year). Consequently, as countries differ in their mortality and fertility conditions as well as their epidemiological profiles [@united2022world; @owid-causes-of-death], the short- and long-term burden associated with parental loss can be expected to vary across the globe. 
 
-In this project, we aim to provide a global assessment of the role of different causes of death in the experience of parental loss. We use a formal kinship matrix approach [@caswell2019formal] in combination with mortality and fertility data from the United Nations World Population Prospects (UNWPP), and to cause-of-death information from the Global Burden of Disease (GBD) study to estimate causes of parental bereavement. In this extended abstract, we present preliminary results for four countries: Afghanistan, Mexico, United States of America (USA), and Zimbabwe.
+In this project, we aim to provide a global assessment of the role of different causes of death in the experience of parental loss. We use a formal kinship matrix approach [@caswell2019formal] in combination with mortality and fertility data from the United Nations World Population Prospects (UNWPP), and cause-of-death information from the Global Burden of Disease (GBD) study to estimate causes of parental bereavement. In this extended abstract, we present preliminary results for four countries: Afghanistan, Mexico, United States of America (USA), and Zimbabwe.
 
 # Data and Method
 
 We combined two sources of data to estimate the worldwide parental loss by cause of death: cause-specific mortality, and life table data with its associated population counts, and fertility rates. 
 
-We used the 2022 Revision of World Population Prospects [@united2022world] to obtain period life table by sex; period fertility rates for females aged 15 to 49 years old, and yearly population counts by sex, all by 1-year age class and grouped into individual calendar year over the period 1950-2019. Cause of death information was obtained from modeled data from the @ihme2019gbd available over the period 1990-2019. Cause of death information was collected from this source for ages 0, 1-4, and then in five-year age groups until the open age-group 95 and more. We converted these counts into 1-year age group until age 100+, using a penalized composite link model [@rizzi2015efficient]. Twenty-two causes of death were selected corresponding to the level two of the GBD hierarchy of causes. 
+We used the 2022 Revision of World Population Prospects [@united2022world] to obtain period life tables by sex; period fertility rates for females aged 15 to 49 years old, and yearly population counts by sex, all by 1-year age class and grouped into individual calendar years over the period 1950--2019. Cause of death information was obtained from modeled data from the Global Burden of Disease (GBD) study [@ihme2019gbd] available over the period 1990--2019. Cause of death information was collected from this source for ages 0, 1--4, and then in five-year age groups until the open age-group 95 and more. We converted these counts into 1-year age group until age 100+, using a penalized composite link model [@rizzi2015efficient]. Twenty-two causes of death were selected corresponding to level two of the GBD hierarchy of causes. 
 
-In order to estimate parental loss by cause, we used the kinship matrix projection model developed by @caswell2019formal focusing only on the projected kin that are parent (mother and father).  
-The model combined several extensions to use time-varying and sex-differentiated vital rates while accounting for death from multiple causes [@caswell2021formal; @caswell2022formal; @caswell2023formal]. The projection model for parents can be expressed as follows
+In order to estimate parental loss by cause, we used the kinship matrix projection model developed by @caswell2019formal focusing only on the projected kin that are parent (mother and father). The model combined several extensions to use time-varying and sex-differentiated vital rates while accounting for death from multiple causes [@caswell2021formal; @caswell2022formal; @caswell2023formal]. The projection model for parents can be expressed as follows:
 
 $$\begin{pmatrix} \boldsymbol{d}^f_L \\ 
 \boldsymbol{d}^m_L \\ 
@@ -173,7 +172,7 @@ $$\begin{pmatrix} \boldsymbol{d}^f_L \\
 \boldsymbol{d}^m_D
 \end{pmatrix}(x, t)$$
 
-where $\omega=101$ is the number of ages considered; $\alpha=22$ are the twenty-two different causes of death considered; the matrix $\boldsymbol{U}_t$ of dimension $(\omega \times \omega)$ contains the survival probabilities on its main subdiagonal; the matrix $\boldsymbol{M}_t$ of dimension $(\alpha\omega \times \omega)$ contains the probabilities of dying from the causes considered on its main diagonals; $\boldsymbol{d}_L$ refers to the age distribution of the parent living and $\boldsymbol{d}_D$ reflects the age distribution of the parent dying by cause, in year $t$ when a child is aged $x$; upper scripts $f$ and $m$ corresponds to female and male, respectively; subscript $t$ refers to the year. The block matrix on the right-hand side allows to project the parents' age distribution (alive or dead) over time, as their child ages. The model is fit to each country separately.  
+where $\omega=101$ is the number of ages considered; $\alpha=22$ are the twenty-two different causes of death considered; the matrix $\boldsymbol{U}_t$ of dimension $(\omega \times \omega)$ contains the survival probabilities on its main subdiagonal; the matrix $\boldsymbol{M}_t$ of dimension $(\alpha\omega \times \omega)$ contains the probabilities of dying from the causes considered on its main diagonals; $\boldsymbol{d}_L$ refers to the age distribution of the parent living and $\boldsymbol{d}_D$ reflects the age distribution of the parent dying by cause, in year $t$ when a child is aged $x$; upper scripts $f$ and $m$ correspond to female and male, respectively; subscript $t$ refers to the year. The block matrix on the right-hand side allows to project the parents' age distribution (alive or dead) over time, as their child ages. The model is fit to each country separately.  
 The model requires as input the age distribution of parents of offspring (see @caswell2021formal for more details). We assumed that in a given year $t$, both parents were alive at the time of birth and the age distribution of parents at the birth of their child (when $x=0$) is expressed as $\boldsymbol{\pi_t} = \frac{\boldsymbol{f}_t \circ \boldsymbol{n}_t}{||\boldsymbol{f}_t \circ \boldsymbol{n}_t||}$, where $\boldsymbol{f}_t$ is a vector of dimension $(\omega \times 1)$ containing age-specific fertility rates and $\boldsymbol{n}_t$ is a vector of dimension $(\omega \times 1)$ being the age distribution of the overall population. Hence, at the birth of a child in year $t$, 
 
 $$\begin{pmatrix} \boldsymbol{d}^f_L \\ 
@@ -189,10 +188,10 @@ $$\begin{pmatrix} \boldsymbol{d}^f_L \\
 \end{pmatrix}
 $$
 
-We assumed that female and male age-specific fertility rates were equal as the UN does not provide male fertility [@alburez2023projections]. 
-Cause-specific mortality was not available for the period 1950-1990. During this period, we simplified the block-matrix to only contain survival probabilities, meaning that we only projected the age distribution of parents alive before 1990 ($\boldsymbol{M}_t = \boldsymbol{0}$ for $t < 1990$). We additionally recorded the age distribution of parents dying by cause from 1990 until 2019. As it is commonly done in these models [@snyder2022covid; @verdery2020covid], before 1950, we assumed that the earliest available rates have been operating for a long time (stable population assumption). 
+We assumed that female and male age-specific fertility rates were equal as the UN does not provide data on male fertility [@alburez2023projections]. 
+Cause-specific mortality was not available for the period 1950-1990. During this period, we simplified the block-matrix to only contain survival probabilities, meaning that we only projected the age distribution of parents alive before 1990 ($\boldsymbol{M}_t = \boldsymbol{0}$ for $t < 1990$). We additionally recorded the age distribution of parents dying by cause from 1990 until 2019. As it is commonly done in these models [@snyder2022covid; @verdery2020covid], before 1950, we assumed that the earliest available rates operated for a long time (stable population assumption). 
 
-The kinship matrix projection model provides the mean numbers of parental deaths as a function of their child's age. In order to convert the mean number of parental deaths into the probability that a child experiences such a death, we assumed that the number of parental deaths is binomialy distributed (similar to @caswell2023formal).
+The kinship matrix projection model provides the mean numbers of parental deaths as a function of their child's age. In order to convert the mean number of parental deaths into the probability that a child experiences such a death, we assumed that the number of parental deaths is binomially distributed (similar to @caswell2023formal).
 
 
 
@@ -202,7 +201,7 @@ Figure 1 shows the proportion of underage (below age 18) children who ever lost 
 
 While the probability of maternal orphanhood was generally lower than the one of paternal orphanhood, trends in maternal and paternal bereavement followed similar trends in each country. Probabilities of maternal bereavement were usually affected little by periods of conflict (e.g., Afghanistan in the 1980s, 1977--1979 in Zimbabwe). 
 
-```{r perc-ber-all, message=FALSE, warning=FALSE, fig.cap="Percent of children losing a parent, by parent sex and country over period 1970-2019"}
+```{r perc-ber-all, message=FALSE, warning=FALSE, fig.cap="Percent of children that ever lost a parent, by parent sex and country over period 1970-2019"}
 
 ## cod data available from year 1990
 ## !! years 1950  to 1990, assumed causes where
@@ -241,7 +240,7 @@ Figure 2 breaks down the proportion of paternal and maternal bereavement among u
 
 In line with trends displayed in Figure 1, paternal and maternal bereavement from “self-harm and interpersonal violence”, “cardiovascular diseases”, and “neoplasms” in the United States have displayed relatively stagnant trends in the 21st century. Similarly, following the all-cause trends in Figure 1, maternal bereavement from “cardiovascular diseases”, “maternal and neonatal disorders”, and “neoplasms” in Afghanistan and maternal bereavement from “neoplasms”, “cardiovascular diseases”, and “diabetes and kidney diseases” in Mexico showed declining trends, albeit to varying degrees. In Zimbabwe, parental bereavement due to “HIV/AIDS and sexually transmitted infections” clearly stands out as the driver of the all-cause trends shown in Figure 1. At the peak of the HIV/AIDS crisis in Zimbabwe, 16% of children had previously lost their father to “HIV/AIDS and sexually transmitted infections”, while 20% of children had previously lost their mother. Finally, offsetting trends among different causes of death were seen for fathers in Afghanistan and Mexico, where, at different time points, high and rising bereavement from “self-harm and interpersonal violence” counteracted improvements in the remaining two causes of death (Afghanistan: “cardiovascular diseases” and “transport injuries”; Mexico: “digestive diseases” and “transport injuries”).
 
-```{r perc-ber-top, message=FALSE, warning=FALSE, fig.cap="Percent of children losing a parent, by parent sex and country top three causes of parental death over period 1990-2019"}
+```{r perc-ber-top, message=FALSE, warning=FALSE, fig.cap="Percent of children that ever lost a parent, by parent sex and country top three causes of parental death over period 1990-2019"}
 
 ## nber of causes considered
 top.n <- 3
@@ -355,7 +354,7 @@ cowplot::plot_grid(fig,
 
 ```
 
-Finally, focusing in the age distribution of parental loss, Figure 3 shows the probability (y-axis) of having lost at least one parent (father or mother) by age (x-axis) and cause of death (area color) in Afghanistan (left) and Mexico (right) in the year 2019. The top panels show the probability of parental loss from “cardiovascular diseases” and “neoplasms”, while the bottom panels focus on the remaining top ten causes of death in each country in 2019 (excluding “cardiovascular diseases” and “neoplasms”). 
+Finally, focusing on the age distribution of parental loss, Figure 3 shows the probability (y-axis) of losing at least one parent (father or mother) by age (x-axis) and cause of death (area color) in Afghanistan (left) and Mexico (right) in the year 2019. The top panels show the probability of parental loss from “cardiovascular diseases” and “neoplasms”, while the bottom panels focus on the remaining top ten causes of death in each country in 2019 (excluding “cardiovascular diseases” and “neoplasms”). 
 
 ```{r nber text, message=FALSE, warning=FALSE}
 
@@ -389,12 +388,12 @@ text <- df_results |>
 ```
 
 
-In Afghanistan (`r round(text$cum_prob_ber[text$age == 17 & text$ctry == "Afghanistan"] * 100, 0)`%), the probability of having lost a parent to any cause was higher in childhood (i.e., below age 18) than in Mexico (`r round(text$cum_prob_ber[text$age == 17 & text$ctry == "Mexico"] * 100, 0)`%). Looking at the bottom panel of Figure 3, it becomes clear that “self-harm and interpersonal violence”, “transport injuries”, and "unintentional injuries" were the main contributors to this pattern. 
+In line with Figure 1, the (cumulative) probability of having lost a parent to any cause was higher in childhood (i.e., below age 18) in Afghanistan (`r round(text$cum_prob_ber[text$age == 17 & text$ctry == "Afghanistan"] * 100, 0)`%) than in Mexico (`r round(text$cum_prob_ber[text$age == 17 & text$ctry == "Mexico"] * 100, 0)`%). Looking at the bottom panel of Figure 3, it becomes clear that “self-harm and interpersonal violence”, “transport injuries”, and "unintentional injuries" were the main contributors to this pattern. 
 
 The adult peak of parental loss was reached at around age 50 in Afghanistan and at around age 60 in Mexico. Parental loss from “self-harm and interpersonal violence” was more important for parental loss at all ages in Afghanistan. In contrast, “diabetes and kidney diseases”, “digestive diseases”, and “neurological disorders” played a more important role in Mexico.
 
 
-```{r ber-prob, message=FALSE, warning=FALSE, fig.cap="Age- and cause-specific bereavement probabilities of losing at least one parent, by country top twelve causes in 2019"}
+```{r ber-prob, message=FALSE, warning=FALSE, fig.cap="Age- and cause-specific probabilities of losing at least one parent, by country top twelve causes in 2019"}
 
 ex.countries <- c("Mexico", "Afghanistan")
 ex.year <- 2019
@@ -498,7 +497,7 @@ df_results |>
   theme_plot() +
   theme(legend.position = "right") +
   scale_fill_manual(values = cols) +
-  labs(y = "Cause-specific prevalence of losing at least one parent",
+  labs(y = "Cause-specific probability of losing at least one parent",
        x = "Child's life course (age in years)", 
        fill = "Parental cause of death")
   
