@@ -142,7 +142,7 @@ Kin loss is not just the product of present mortality rates. The probability of 
 
 In this project, we aim to provide a global assessment of the role of different causes of death in the experience of parental loss. We use a formal kinship matrix approach [@caswell2019formal] in combination with mortality and fertility data from the United Nations World Population Prospects (UNWPP), and cause-of-death information from the Global Burden of Disease (GBD) study to estimate causes of parental bereavement. In this extended abstract, we present preliminary results for four countries: Afghanistan, Mexico, United States of America (USA), and Zimbabwe.
 
-# Data and Method
+# Data and Methods
 
 We combined two sources of data to estimate the worldwide parental loss by cause of death: cause-specific mortality, and life table data with its associated population counts, and fertility rates. 
 
@@ -191,13 +191,22 @@ $$
 We assumed that female and male age-specific fertility rates were equal as the UN does not provide data on male fertility [@alburez2023projections]. 
 Cause-specific mortality was not available for the period 1950--1990. During this period, we simplified the block-matrix to only contain survival probabilities, meaning that we only projected the age distribution of parents alive before 1990 ($\boldsymbol{M}_t = \boldsymbol{0}$ for $t < 1990$). We additionally recorded the age distribution of parents dying by cause from 1990 until 2019. As it is commonly done in these models [@snyder2022covid; @verdery2020covid], before 1950, we assumed that the earliest available rates operated for a long time (stable population assumption). 
 
-The kinship matrix projection model provides the mean numbers of parental deaths as a function of their child's age. In order to convert the mean number of parental deaths into the probability that a child experiences such a death, we assumed that the number of parental deaths is binomially distributed (similar to @caswell2023formal).
+The kinship matrix projection model provides the mean numbers of parental deaths ($d_D(x)$) for a child at every age $x$. The sum of the mean numbers of parental deaths over the child's life course is equal to two as we consider mother and father. In order to convert the mean number of parental deaths into the probability that a child experiences such a death at a given age, we assumed that the number of parental deaths at age $x$ is binomially distributed (similarly to @caswell2023formal),
+
+$$\text{Pr.(losing k parents)}_x = \binom{2}{k}\left(\frac{d_D(x)}{2}\right)^k\left(1-\frac{d_D(x)}{2}\right)^{2-k}.$$
+
+Hence, the probability of losing at least one parent at age $x$ is computed as follows,
+
+$$\text{Pr.(losing at least one parent)}_x = 1 - \text{Pr.(losing 0 parent)}_x = 1 -  \left(1-\frac{d_D(x)}{2}\right)^2.$$
+Finally, obtaining the probability of children under 18 losing at least one parent can be expressed as follows,
+
+$$\text{Pr.(losing at least one parent)}_{<18} = 1 - \left(1-\frac{\sum^{17}_{x=0}d_D(x)}{2}\right)^2.$$
 
 
 
 # Preliminary Results
 
-Figure 1 shows the proportion of underage (below age 18) children who ever lost a father (left panel) or mother (right panel) over the period 1970--2019 for the four selected countries, Afghanistan, Mexico, the United States, and Zimbabwe. There are clear differences in country-specific trends over time. In the U.S., the probability of paternal orphanhood remained relatively constant over the five decades of observation, at about 5%, while this probability declined sharply between the 1970s and the mid-2000s in Mexico. In Afghanistan, the probability of paternal death also showed a declining trend, with the exception of the periods 1979--1992 and 2017--2019, which were marked by large-scale conflict. Zimbabwe represents an exception to the general trend of low or declining paternal bereavement, with the likelihood of ever having lost a father increasing sharply during the 1980s and 1990s, which coincided with the HIV/AIDS crisis. During the 2010s, the likelihood of paternal bereavement in Zimbabwe started to decline again. 
+Figure 1 shows the proportion of children under 18 years old who ever lost a father (left panel) or mother (right panel) over the period 1970--2019 for the four selected countries, Afghanistan, Mexico, the United States, and Zimbabwe. There are clear differences in country-specific trends over time. In the U.S., the probability of paternal orphanhood remained relatively constant over the five decades of observation, at about 5%, while this probability declined sharply between the 1970s and the mid-2000s in Mexico. In Afghanistan, the probability of paternal death also showed a declining trend, with the exception of the periods 1979--1992 and 2017--2019, which were marked by large-scale conflict. Zimbabwe represents an exception to the general trend of low or declining paternal bereavement, with the likelihood of ever having lost a father increasing sharply during the 1980s and 1990s, which coincided with the HIV/AIDS crisis. During the 2010s, the likelihood of paternal bereavement in Zimbabwe started to decline again. 
 
 While the probability of maternal orphanhood was generally lower than the one of paternal orphanhood, trends in maternal and paternal bereavement followed similar trends in each country. Probabilities of maternal bereavement were usually affected little by periods of conflict (e.g., Afghanistan in the 1980s, 1977--1979 in Zimbabwe). 
 
@@ -236,7 +245,7 @@ df_results |>
 
 ```
 
-Figure 2 breaks down the proportion of paternal and maternal bereavement among underage children by causes of death for the period 1990--2019. For each country-sex combination, the proportion of paternal and maternal orphanhood is shown for the top three causes of death over the entire thirty-year period.
+Figure 2 breaks down the proportion of paternal and maternal bereavement among children under 18 years old by causes of death for the period 1990--2019. For each country-sex combination, the proportion of paternal and maternal orphanhood is shown for the top three causes of death over the entire thirty-year period.
 
 In line with trends displayed in Figure 1, paternal and maternal bereavement from “self-harm and interpersonal violence”, “cardiovascular diseases”, and “neoplasms” in the United States have displayed relatively stagnant trends in the 21st century. Similarly, following the all-cause trends in Figure 1, maternal bereavement from “cardiovascular diseases”, “maternal and neonatal disorders”, and “neoplasms” in Afghanistan and maternal bereavement from “neoplasms”, “cardiovascular diseases”, and “diabetes and kidney diseases” in Mexico showed declining trends, albeit to varying degrees. In Zimbabwe, parental bereavement due to “HIV/AIDS and sexually transmitted infections” clearly stands out as the driver of the all-cause trends shown in Figure 1. At the peak of the HIV/AIDS crisis in Zimbabwe, 16% of children had previously lost their father to “HIV/AIDS and sexually transmitted infections”, while 20% of children had previously lost their mother. Finally, offsetting trends among different causes of death were seen for fathers in Afghanistan and Mexico, where, at different time points, high and rising bereavement from “self-harm and interpersonal violence” counteracted improvements in the remaining two causes of death (Afghanistan: “cardiovascular diseases” and “transport injuries”; Mexico: “digestive diseases” and “transport injuries”).
 
@@ -388,7 +397,7 @@ text <- df_results |>
 ```
 
 
-In line with Figure 1, the (cumulative) probability of having lost a parent to any cause was higher in childhood (i.e., below age 18) in Afghanistan (`r round(text$cum_prob_ber[text$age == 17 & text$ctry == "Afghanistan"] * 100, 0)`%) than in Mexico (`r round(text$cum_prob_ber[text$age == 17 & text$ctry == "Mexico"] * 100, 0)`%). Looking at the bottom panel of Figure 3, it becomes clear that “self-harm and interpersonal violence”, “transport injuries”, and "unintentional injuries" were the main contributors to this pattern. 
+In line with Figure 1, the probability of having lost a parent was higher in childhood (i.e., areas for top twelve causes below age 18) in Afghanistan than in Mexico. Looking at the bottom panel of Figure 3, it becomes clear that “self-harm and interpersonal violence”, “transport injuries”, and "unintentional injuries" were the main contributors to this pattern. 
 
 The adult peak of parental loss was reached at around age 50 in Afghanistan and at around age 60 in Mexico. Parental loss from “self-harm and interpersonal violence” was more important for parental loss at all ages in Afghanistan. In contrast, “diabetes and kidney diseases”, “digestive diseases”, and “neurological disorders” played a more important role in Mexico.
 
